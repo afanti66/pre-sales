@@ -1,0 +1,35 @@
+{
+  "task_id": "framework-003-system",
+  "phase": "framework",
+  "level": "task",
+  "assignee": "vm3",
+  "status": "completed",
+  "depends_on": [
+    "research-001-outline",
+    "research-003-solution"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/003_solution.md",
+      "description": "方案知识"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/framework/003_system.md",
+      "description": "系统框架"
+    }
+  ],
+  "estimated_tokens": 20000,
+  "actual_tokens": 2203,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "系统架构设计（逻辑架构、物理架构、技术选型、系统边界）",
+  "started_at": "2026-07-12T15:37:03.251144",
+  "completed_at": "2026-07-12T15:37:03.443939"
+}
