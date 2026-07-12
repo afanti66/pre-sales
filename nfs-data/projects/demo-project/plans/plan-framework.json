@@ -1,0 +1,66 @@
+{
+  "plan_id": "PLAN-FRAMEWORK-demo",
+  "project": "demo-project",
+  "phase": "framework",
+  "level": "stage",
+  "created_at": "2026-07-12T14:05:09.505014",
+  "token_budget": {
+    "total_available": 1048576,
+    "per_vm": 1048576,
+    "safety_margin": 0.3,
+    "usable_per_vm": 733803
+  },
+  "assessment": {
+    "input_size_estimate": 30000,
+    "output_size_estimate": 20000,
+    "total_estimate": 50000,
+    "verdict": "level_ok"
+  },
+  "items": [
+    {
+      "task_id": "framework-001-matrix",
+      "level": "task",
+      "assignee": "vm1",
+      "estimated_tokens": 15000,
+      "depends_on": [
+        "research-001-outline",
+        "research-003-solution"
+      ],
+      "description": "需求矩阵编制"
+    },
+    {
+      "task_id": "framework-002-business",
+      "level": "task",
+      "assignee": "vm2",
+      "estimated_tokens": 14000,
+      "depends_on": [
+        "research-002-literature"
+      ],
+      "description": "业务框架设计"
+    },
+    {
+      "task_id": "framework-003-system",
+      "level": "task",
+      "assignee": "vm3",
+      "estimated_tokens": 20000,
+      "depends_on": [
+        "research-001-outline",
+        "research-003-solution"
+      ],
+      "description": "系统框架设计"
+    },
+    {
+      "task_id": "check-framework",
+      "level": "task",
+      "assignee": "vm2",
+      "estimated_tokens": 18000,
+      "depends_on": [
+        "framework-001-matrix",
+        "framework-002-business",
+        "framework-003-system"
+      ],
+      "description": "框架阶段检查+校审"
+    }
+  ],
+  "reasoning": "框架阶段3个子任务依赖调研产出，无相互依赖，可并行分配3台VM。3个产出汇总为背景知识。"
+}
