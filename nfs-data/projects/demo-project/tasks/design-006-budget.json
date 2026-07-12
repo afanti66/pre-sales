@@ -1,0 +1,30 @@
+{
+  "task_id": "design-006-budget",
+  "phase": "design",
+  "level": "stage",
+  "assignee": "vm3",
+  "status": "completed",
+  "depends_on": [
+    "design-003-subproject"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/003_subproject.md",
+      "description": "分项方案章节"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/design/006_budget.md",
+      "description": "方案书·预算方案章节"
+    }
+  ],
+  "estimated_tokens": 12000,
+  "actual_tokens": 3067,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "按方案大纲预算部分目录，编写预算方案章节（软硬件配置清单、报价估算）",
+  "started_at": null,
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "budget"
+}
