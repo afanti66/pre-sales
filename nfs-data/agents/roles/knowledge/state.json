@@ -1,0 +1,44 @@
+{
+  "agent_id": "knowledge",
+  "name": "知识智能体",
+  "emoji": "🧠",
+  "description": "管理历史方案库、文献论文库、标准规范库、方案模板库、token基线库",
+  "expertise": "知识管理 · 历史方案检索 · 模板匹配 · 基线统计",
+  "status": "idle",
+  "tasks_completed": 0,
+  "total_tokens_used": 0,
+  "assigned_to": "N/A",
+  "input_output": {
+    "input": "历史项目各阶段产出物、标准规范文件、文献论文、方案模板、各任务实际token消耗记录",
+    "output": "按需提供：①相似历史方案 ②匹配模板/大纲骨架 ③相关标准条款 ④token基线参考值",
+    "storage": "nfs-data/knowledge/{templates,baselines,standards,dictionaries}/",
+    "repository": {
+      "templates": [
+        "task-schema.json",
+        "plan-schema.json",
+        "intervention-schema.json",
+        "phase-def.json"
+      ],
+      "baselines": [
+        "token-baselines.json(150条)"
+      ],
+      "standards": [
+        "待积累"
+      ],
+      "dictionaries": [
+        "待积累"
+      ]
+    }
+  },
+  "updated_at": "2026-07-12T15:11:26.317780",
+  "self_check": {
+    "scope": "输入→输出 边界对齐",
+    "checklist": [
+      "☐ 输入覆盖 — 所有输入要素在输出中有对应处理",
+      "☐ 输出符合目标 — 产出内容与职责定义一致",
+      "☐ 无添加 — 不引入输入中不存在的信息（除非有明确依据）"
+    ],
+    "action_on_fail": "自行修正→重复自检→通过后提交",
+    "principle": "自检不通过不提交"
+  }
+}
