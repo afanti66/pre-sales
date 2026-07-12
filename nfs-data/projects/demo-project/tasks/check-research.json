@@ -1,0 +1,45 @@
+{
+  "task_id": "check-research",
+  "phase": "research",
+  "level": "task",
+  "assignee": "vm1",
+  "status": "completed",
+  "depends_on": [
+    "research-001-outline",
+    "research-002-literature",
+    "research-003-solution"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/002_literature.md",
+      "description": "文献知识"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/003_solution.md",
+      "description": "方案知识"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/check/research-check.json",
+      "description": "检查报告"
+    },
+    {
+      "path": "projects/demo-project/delivery/research/",
+      "description": "推送目录"
+    }
+  ],
+  "estimated_tokens": 18000,
+  "actual_tokens": 2307,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "调研阶段检查（内容正确性+校审格式标准化），通过后推送后台文档",
+  "started_at": "2026-07-12T15:37:02.864257",
+  "completed_at": "2026-07-12T15:37:02.950296"
+}
