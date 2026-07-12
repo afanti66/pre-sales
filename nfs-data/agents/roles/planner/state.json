@@ -1,0 +1,27 @@
+{
+  "agent_id": "planner",
+  "name": "规划智能体",
+  "emoji": "📐",
+  "description": "基于调研产出+模型参数+token基线，输出精细规划方案",
+  "expertise": "token估算 · 粒度决策 · VM分配 · 依赖链设计",
+  "status": "idle",
+  "total_plans": 4,
+  "last_plan_phase": "ppt",
+  "token_budget_used": 0,
+  "input_output": {
+    "input": "①模型参数（64K/VM数）②文献知识（按维度摘录）③方案知识（按维度摘录）④方案大纲 ⑤知识智能体→历史token基线",
+    "output": "规划方案JSON（分阶段任务、assignee、预估token、依赖链、并行策略）",
+    "workflow": "对照大纲逐章估算→查基线匹配历史→定粒度(stage/task/subtask)→选VM→写规划方案到NFS"
+  },
+  "updated_at": "2026-07-12T15:11:26.317780",
+  "self_check": {
+    "scope": "输入→输出 边界对齐",
+    "checklist": [
+      "☐ 输入覆盖 — 所有输入要素在输出中有对应处理",
+      "☐ 输出符合目标 — 产出内容与职责定义一致",
+      "☐ 无添加 — 不引入输入中不存在的信息（除非有明确依据）"
+    ],
+    "action_on_fail": "自行修正→重复自检→通过后提交",
+    "principle": "自检不通过不提交"
+  }
+}
