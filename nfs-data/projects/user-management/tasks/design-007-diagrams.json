@@ -1,0 +1,14 @@
+{
+  "task_id": "design-007-diagrams",
+  "phase": "design",
+  "status": "completed",
+  "agent_id": "diagrams",
+  "assignee": "vm3",
+  "actual_tokens": 4548,
+  "description": "图例汇总",
+  "started_at": "2026-07-12T15:48:13.533983",
+  "completed_at": "2026-07-12T15:48:13.533983",
+  "depends_on": [],
+  "input_refs": [],
+  "output_refs": []
+}

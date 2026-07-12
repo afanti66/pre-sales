@@ -1,0 +1,14 @@
+{
+  "task_id": "design-004-common",
+  "phase": "design",
+  "status": "completed",
+  "agent_id": "common",
+  "assignee": "vm1",
+  "actual_tokens": 3116,
+  "description": "公共部分章节+mermaid",
+  "started_at": "2026-07-12T15:48:13.533983",
+  "completed_at": "2026-07-12T15:48:13.533983",
+  "depends_on": [],
+  "input_refs": [],
+  "output_refs": []
+}

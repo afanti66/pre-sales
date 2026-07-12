@@ -1,0 +1,44 @@
+{
+  "project_id": "user-mgmt",
+  "name": "XX集团统一用户管理系统",
+  "status": "active",
+  "current_phase": "init",
+  "phases": {
+    "research": {
+      "status": "pending",
+      "progress": 0
+    },
+    "framework": {
+      "status": "pending",
+      "progress": 0
+    },
+    "design": {
+      "status": "pending",
+      "progress": 0
+    },
+    "ppt": {
+      "status": "pending",
+      "progress": 0
+    }
+  },
+  "delivery": {
+    "research": {
+      "pushed": false,
+      "version": null
+    },
+    "framework": {
+      "pushed": false,
+      "version": null
+    },
+    "design": {
+      "pushed": false,
+      "version": null
+    },
+    "ppt": {
+      "pushed": false,
+      "version": null
+    }
+  },
+  "created_at": "2026-07-12T15:32:25.516214",
+  "updated_at": "2026-07-12T15:32:25.516214"
+}

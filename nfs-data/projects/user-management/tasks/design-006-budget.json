@@ -1,0 +1,14 @@
+{
+  "task_id": "design-006-budget",
+  "phase": "design",
+  "status": "completed",
+  "agent_id": "budget",
+  "assignee": "vm3",
+  "actual_tokens": 3067,
+  "description": "预算方案章节",
+  "started_at": "2026-07-12T15:48:13.533983",
+  "completed_at": "2026-07-12T15:48:13.533983",
+  "depends_on": [],
+  "input_refs": [],
+  "output_refs": []
+}

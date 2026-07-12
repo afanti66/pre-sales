@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统一用户管理系统 · 原型</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
+body{background:#f0f2f5;color:#333;padding:20px}
+.header{background:#1a73e8;color:white;padding:16px 24px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:18px;font-weight:500}
+.header .sub{font-size:13px;opacity:.8}
+.nav{background:white;display:flex;border-bottom:1px solid #e0e0e0;padding:0 24px}
+.nav a{padding:12px 20px;text-decoration:none;color:#666;font-size:14px;border-bottom:2px solid transparent}
+.nav a.active{color:#1a73e8;border-bottom-color:#1a73e8}
+.content{background:white;padding:24px;border-radius:0 0 8px 8px;min-height:400px}
+.page{display:none}
+.page.active{display:block}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;color:#666;margin-bottom:4px}
+.form-group input,.form-group select{width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px}
+.form-group input:focus{border-color:#1a73e8;outline:none}
+.btn{background:#1a73e8;color:white;border:none;padding:8px 24px;border-radius:4px;font-size:14px;cursor:pointer}
+.btn:hover{background:#1557b0}
+.btn-secondary{background:white;color:#1a73e8;border:1px solid #1a73e8;padding:8px 24px;border-radius:4px;font-size:14px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eee;font-size:13px}
+th{background:#f5f7fa;color:#666;font-weight:500}
+.badge{padding:2px 8px;border-radius:10px;font-size:11px}
+.badge-active{background:#e8f5e9;color:#2e7d32}
+.badge-disabled{background:#fbe9e7;color:#c62828}
+.card{background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:16px;margin-bottom:16px}
+.card h3{font-size:14px;color:#333;margin-bottom:8px}
+.row{display:flex;gap:16px}
+.col{flex:1}
+.stat{text-align:center;padding:20px;background:#f5f7fa;border-radius:8px}
+.stat .num{font-size:24px;font-weight:600;color:#1a73e8}
+.stat .label{font-size:12px;color:#999;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>统一用户管理与身份认证系统</h1>
+    <div class="sub">管理控制台 · 原型</div>
+  </div>
+  <div>
+    <button class="btn-secondary" style="color:white;border-color:rgba(255,255,255,.3)" onclick="showPage('user')">用户管理</button>
+    <button class="btn-secondary" style="color:white;border-color:rgba(255,255,255,.3);margin-left:8px" onclick="showPage('role')">角色管理</button>
+    <button class="btn-secondary" style="color:white;border-color:rgba(255,255,255,.3);margin-left:8px" onclick="showPage('audit')">审计日志</button>
+  </div>
+</div>
+
+<div class="nav">
+  <a href="#" class="active" onclick="return showPage('dashboard')">概览</a>
+  <a href="#" onclick="return showPage('org')">组织管理</a>
+  <a href="#" onclick="return showPage('user')">用户管理</a>
+  <a href="#" onclick="return showPage('auth')">认证配置</a>
+  <a href="#" onclick="return showPage('role')">角色权限</a>
+  <a href="#" onclick="return showPage('app')">应用接入</a>
+  <a href="#" onclick="return showPage('audit')">审计日志</a>
+</div>
+
+<div class="content">
+
+<!-- 概览 -->
+<div id="page-dashboard" class="page active">
+  <div class="row">
+    <div class="col"><div class="stat"><div class="num">12,847</div><div class="label">总用户数</div></div></div>
+    <div class="col"><div class="stat"><div class="num">3,216</div><div class="label">今日活跃</div></div></div>
+    <div class="col"><div class="stat"><div class="num">8</div><div class="label">接入应用</div></div></div>
+    <div class="col"><div class="stat"><div class="num">99.97%</div><div class="label">系统可用性</div></div></div>
+  </div>
+  <div class="row" style="margin-top:16px">
+    <div class="col"><div class="card"><h3>最近认证趋势</h3><div style="height:120px;background:#f5f7fa;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#999">认证流量图</div></div></div>
+    <div class="col"><div class="card"><h3>待处理事项</h3><div style="padding:8px 0;font-size:13px;color:#666">审核待办：23条<br>异常告警：3条<br>同步失败：1条</div></div></div>
+  </div>
+</div>
+
+<!-- 组织管理 -->
+<div id="page-org" class="page">
+  <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+    <h2 style="font-size:16px">组织架构</h2>
+    <div><button class="btn">新增组织</button></div>
+  </div>
+  <div class="card" style="padding:12px">
+    <div style="font-size:13px;line-height:2">
+      <div style="font-weight:600">📁 某单位</div>
+      <div style="padding-left:20px">📁 办公室</div>
+      <div style="padding-left:20px">📁 人事处</div>
+      <div style="padding-left:40px">📁 招聘科</div>
+      <div style="padding-left:40px">📁 薪酬科</div>
+      <div style="padding-left:20px">📁 财务处</div>
+      <div style="padding-left:40px">📁 会计核算科</div>
+      <div style="padding-left:40px">📁 预算管理科</div>
+      <div style="padding-left:20px">📁 信息中心</div>
+      <div style="padding-left:20px">📁 档案处</div>
+    </div>
+  </div>
+</div>
+
+<!-- 用户管理 -->
+<div id="page-user" class="page">
+  <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+    <h2 style="font-size:16px">用户列表</h2>
+    <div><button class="btn">新增用户</button> <button class="btn-secondary" style="margin-left:8px">批量导入</button></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <input placeholder="搜索用户名/手机号..." style="padding:6px 12px;border:1px solid #ddd;border-radius:4px;flex:1;font-size:13px">
+    <select style="padding:6px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+      <option>全部状态</option><option>已激活</option><option>待审核</option><option>已禁用</option>
+    </select>
+    <select style="padding:6px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+      <option>全部组织</option><option>办公室</option><option>人事处</option>
+    </select>
+    <button class="btn-secondary">查询</button>
+  </div>
+  <table>
+    <tr><th>用户名</th><th>姓名</th><th>所属组织</th><th>手机号</th><th>状态</th><th>最近登录</th><th>操作</th></tr>
+    <tr><td>zhangsan</td><td>张三</td><td>信息中心</td><td>138****1234</td><td><span class="badge badge-active">已激活</span></td><td>2026-07-12 09:30</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑</a> <a href="#" style="color:#c62828;font-size:12px">禁用</a></td></tr>
+    <tr><td>lisi</td><td>李四</td><td>财务处</td><td>139****5678</td><td><span class="badge badge-active">已激活</span></td><td>2026-07-11 14:20</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑</a> <a href="#" style="color:#c62828;font-size:12px">禁用</a></td></tr>
+    <tr><td>wangwu</td><td>王五</td><td>人事处</td><td>136****9012</td><td><span class="badge badge-disabled">已禁用</span></td><td>2026-06-30 08:15</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑</a> <a href="#" style="color:#2e7d32;font-size:12px">启用</a></td></tr>
+  </table>
+</div>
+
+<!-- 认证配置 -->
+<div id="page-auth" class="page">
+  <h2 style="font-size:16px;margin-bottom:16px">认证配置</h2>
+  <div class="card">
+    <h3>登录方式</h3>
+    <div style="margin-top:8px">
+      <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">
+        <span style="flex:1;font-size:13px">用户名密码登录</span><span class="badge badge-active">已启用</span>
+      </div>
+      <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">
+        <span style="flex:1;font-size:13px">短信验证码登录</span><span class="badge badge-active">已启用</span>
+      </div>
+      <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">
+        <span style="flex:1;font-size:13px">TOTP动态令牌</span><span class="badge badge-active">已启用</span>
+      </div>
+      <div style="display:flex;align-items:center;padding:8px 0">
+        <span style="flex:1;font-size:13px">数字证书(SM2)</span><span class="badge badge-disabled">未配置</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>SSO协议配置</h3>
+    <div style="margin-top:8px;font-size:13px;color:#666">OAuth2.0 ✓ | OIDC ✓ | SAML2.0 ✓ | CAS ✓</div>
+  </div>
+</div>
+
+<!-- 角色权限 -->
+<div id="page-role" class="page">
+  <h2 style="font-size:16px;margin-bottom:16px">角色管理</h2>
+  <table>
+    <tr><th>角色名称</th><th>角色编码</th><th>所属类型</th><th>用户数</th><th>操作</th></tr>
+    <tr><td>系统管理员</td><td>ADMIN</td><td>管理角色</td><td>3</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑权限</a></td></tr>
+    <tr><td>普通用户</td><td>USER</td><td>业务角色</td><td>12,500</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑权限</a></td></tr>
+    <tr><td>审计员</td><td>AUDITOR</td><td>管理角色</td><td>8</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑权限</a></td></tr>
+    <tr><td>部门经理</td><td>DEPT_MGR</td><td>业务角色</td><td>45</td><td><a href="#" style="color:#1a73e8;font-size:12px">编辑权限</a></td></tr>
+  </table>
+</div>
+
+<!-- 应用接入 -->
+<div id="page-app" class="page">
+  <h2 style="font-size:16px;margin-bottom:16px">已接入应用</h2>
+  <table>
+    <tr><th>应用名称</th><th>应用ID</th><th>协议</th><th>状态</th><th>操作</th></tr>
+    <tr><td>OA系统</td><td>app-oa-001</td><td>OAuth2</td><td><span class="badge badge-active">已接入</span></td><td><a href="#" style="color:#1a73e8;font-size:12px">配置</a></td></tr>
+    <tr><td>财务系统</td><td>app-fin-002</td><td>SAML2</td><td><span class="badge badge-active">已接入</span></td><td><a href="#" style="color:#1a73e8;font-size:12px">配置</a></td></tr>
+    <tr><td>人事系统</td><td>app-hr-003</td><td>CAS</td><td><span class="badge badge-active">已接入</span></td><td><a href="#" style="color:#1a73e8;font-size:12px">配置</a></td></tr>
+  </table>
+</div>
+
+<!-- 审计日志 -->
+<div id="page-audit" class="page">
+  <h2 style="font-size:16px;margin-bottom:16px">审计日志</h2>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <input placeholder="搜索用户/操作/资源..." style="padding:6px 12px;border:1px solid #ddd;border-radius:4px;flex:1;font-size:13px">
+    <input type="date" style="padding:6px 12px;border:1px solid #ddd;border-radius:4px;font-size:13px">
+    <button class="btn-secondary">检索</button>
+  </div>
+  <table>
+    <tr><th>时间</th><th>用户</th><th>操作类型</th><th>资源</th><th>IP</th><th>结果</th></tr>
+    <tr><td>2026-07-12 09:30:15</td><td>zhangsan</td><td>LOGIN</td><td>认证服务</td><td>192.168.1.100</td><td><span class="badge badge-active">成功</span></td></tr>
+    <tr><td>2026-07-12 09:28:03</td><td>admin</td><td>CREATE_USER</td><td>用户: lisi</td><td>192.168.1.50</td><td><span class="badge badge-active">成功</span></td></tr>
+    <tr><td>2026-07-12 09:25:44</td><td>unknown</td><td>LOGIN_FAIL</td><td>认证服务</td><td>10.0.0.55</td><td><span class="badge badge-disabled">失败</span></td></tr>
+    <tr><td>2026-07-12 09:20:12</td><td>admin</td><td>ASSIGN_ROLE</td><td>角色: DEPT_MGR</td><td>192.168.1.50</td><td><span class="badge badge-active">成功</span></td></tr>
+  </table>
+</div>
+
+</div>
+
+<script>
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+  return false;
+}
+</script>
+</body>
+</html>

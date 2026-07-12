@@ -1,0 +1,26 @@
+{
+  "check_id": "check-design-user-management",
+  "phase": "design",
+  "status": "passed",
+  "checked_by": "checker-001",
+  "checked_at": "2026-07-12T15:48:13.533983",
+  "content_check": {
+    "status": "passed",
+    "issues": [],
+    "completeness": 100
+  },
+  "proofreading": {
+    "status": "minor_issues",
+    "issues": [
+      {
+        "type": "terminology",
+        "description": "缺少关键术语'SSO'",
+        "location": "design",
+        "suggestion": "补充SSO相关描述"
+      }
+    ],
+    "corrections_made": 0
+  },
+  "delivery_artifacts": [],
+  "rework_targets": []
+}

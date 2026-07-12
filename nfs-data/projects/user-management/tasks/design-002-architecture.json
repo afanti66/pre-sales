@@ -1,0 +1,14 @@
+{
+  "task_id": "design-002-architecture",
+  "phase": "design",
+  "status": "completed",
+  "agent_id": "architecture",
+  "assignee": "vm2",
+  "actual_tokens": 5983,
+  "description": "总体方案章节+mermaid",
+  "started_at": "2026-07-12T15:48:13.533983",
+  "completed_at": "2026-07-12T15:48:13.533983",
+  "depends_on": [],
+  "input_refs": [],
+  "output_refs": []
+}

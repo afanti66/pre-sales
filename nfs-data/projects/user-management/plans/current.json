@@ -1,0 +1,196 @@
+{
+  "plan_id": "PLAN-FULL-user-management",
+  "project": "user-management",
+  "project_name": "某单位统一用户管理与身份认证系统",
+  "phase": "full",
+  "level": "stage",
+  "created_at": "2026-07-12T15:42:12.986601",
+  "model_params": {
+    "context_length": 1048576,
+    "vm_count": 3,
+    "safety_margin": 0.3,
+    "usable_per_vm": 734003
+  },
+  "assessment": {
+    "total_input_estimate": 12000,
+    "output_estimate": 80000,
+    "verdict": "level_ok",
+    "reasoning": "1M上下文下，调研/框架/设计各阶段均可stage级粒度，无需进一步拆解"
+  },
+  "phases": {
+    "research": {
+      "status": "passed",
+      "sequence": 0,
+      "description": "调研阶段——不需要规划直接执行，路径固定",
+      "tasks": [
+        {
+          "task_id": "research-001-outline",
+          "assignee": "vm1",
+          "agent": "research",
+          "estimated_tokens": 5000,
+          "description": "方案大纲"
+        },
+        {
+          "task_id": "research-002-literature",
+          "assignee": "vm2",
+          "agent": "research",
+          "estimated_tokens": 12000,
+          "description": "文献知识"
+        },
+        {
+          "task_id": "research-003-solution",
+          "assignee": "vm3",
+          "agent": "research",
+          "estimated_tokens": 10000,
+          "description": "方案知识"
+        }
+      ]
+    },
+    "framework": {
+      "status": "ready",
+      "sequence": 1,
+      "description": "框架阶段——需求矩阵→业务框架→系统框架→背景知识",
+      "parallel": true,
+      "dependency": [
+        "research"
+      ],
+      "tasks": [
+        {
+          "task_id": "framework-001",
+          "assignee": "vm1",
+          "agent": "framework",
+          "estimated_tokens": 15000,
+          "description": "需求矩阵+业务框架+系统框架+背景知识（需顺序推导，消耗较高放vm1）"
+        }
+      ]
+    },
+    "design": {
+      "status": "ready",
+      "sequence": 2,
+      "description": "设计阶段——4并行+2串行+1汇总",
+      "dependency": [
+        "framework"
+      ],
+      "parallel_tasks": [
+        {
+          "task_id": "design-001-requirement",
+          "assignee": "vm1",
+          "agent": "requirements",
+          "estimated_tokens": 8000,
+          "description": "需求分析章节+mermaid"
+        },
+        {
+          "task_id": "design-002-architecture",
+          "assignee": "vm2",
+          "agent": "architecture",
+          "estimated_tokens": 10000,
+          "description": "总体方案章节+mermaid"
+        },
+        {
+          "task_id": "design-003-subproject",
+          "assignee": "vm3",
+          "agent": "subproject",
+          "estimated_tokens": 12000,
+          "description": "分项方案章节+mermaid"
+        },
+        {
+          "task_id": "design-004-common",
+          "assignee": "vm1",
+          "agent": "common",
+          "estimated_tokens": 6000,
+          "description": "公共部分章节+mermaid"
+        }
+      ],
+      "trigger_tasks": [
+        {
+          "task_id": "design-005-prototype",
+          "assignee": "vm2",
+          "agent": "prototype",
+          "estimated_tokens": 8000,
+          "description": "原型设计(HTML)+mermaid",
+          "depends_on": [
+            "design-001-requirement"
+          ]
+        },
+        {
+          "task_id": "design-006-budget",
+          "assignee": "vm3",
+          "agent": "budget",
+          "estimated_tokens": 6000,
+          "description": "预算方案章节",
+          "depends_on": [
+            "design-003-subproject"
+          ]
+        }
+      ],
+      "summary_task": {
+        "task_id": "design-007-diagrams",
+        "assignee": "vm3",
+        "agent": "diagrams",
+        "estimated_tokens": 5000,
+        "description": "图例汇总mermaid→drawio→PNG",
+        "depends_on": [
+          "design-001-requirement",
+          "design-002-architecture",
+          "design-003-subproject",
+          "design-004-common",
+          "design-005-prototype",
+          "design-006-budget"
+        ]
+      }
+    },
+    "check": {
+      "status": "pending",
+      "sequence": 3,
+      "description": "各阶段内嵌检查+校审",
+      "per_phase": true
+    },
+    "ppt": {
+      "status": "pending",
+      "sequence": 4,
+      "description": "PPT制作",
+      "dependency": [
+        "design"
+      ],
+      "tasks": [
+        {
+          "task_id": "ppt-001",
+          "assignee": "vm3",
+          "agent": "ppt",
+          "estimated_tokens": 15000,
+          "description": "项目PPT制作"
+        }
+      ]
+    }
+  },
+  "vm_allocation": {
+    "vm1": {
+      "agents": [
+        "research",
+        "framework",
+        "requirements",
+        "common"
+      ],
+      "estimated_total_tokens": 34000
+    },
+    "vm2": {
+      "agents": [
+        "research",
+        "architecture",
+        "prototype",
+        "checker"
+      ],
+      "estimated_total_tokens": 35000
+    },
+    "vm3": {
+      "agents": [
+        "research",
+        "subproject",
+        "budget",
+        "diagrams",
+        "ppt"
+      ],
+      "estimated_total_tokens": 48000
+    }
+  }
+}

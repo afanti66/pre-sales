@@ -1,0 +1,44 @@
+{
+  "project_id": "user-management",
+  "name": "某单位统一用户管理与身份认证系统",
+  "status": "active",
+  "current_phase": "design",
+  "phases": {
+    "research": {
+      "status": "passed",
+      "progress": 100
+    },
+    "framework": {
+      "status": "passed",
+      "progress": 100
+    },
+    "design": {
+      "status": "completed",
+      "progress": 100
+    },
+    "ppt": {
+      "status": "pending",
+      "progress": 0
+    }
+  },
+  "delivery": {
+    "research": {
+      "pushed": true,
+      "version": "v1"
+    },
+    "framework": {
+      "pushed": true,
+      "version": "v1"
+    },
+    "design": {
+      "pushed": true,
+      "version": "v1"
+    },
+    "ppt": {
+      "pushed": false,
+      "version": null
+    }
+  },
+  "created_at": "2026-07-12T15:48:13.533983",
+  "updated_at": "2026-07-12T15:48:13.533983"
+}

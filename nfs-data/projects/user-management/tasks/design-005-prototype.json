@@ -1,0 +1,14 @@
+{
+  "task_id": "design-005-prototype",
+  "phase": "design",
+  "status": "completed",
+  "agent_id": "prototype",
+  "assignee": "vm2",
+  "actual_tokens": 12170,
+  "description": "原型设计HTML+mermaid",
+  "started_at": "2026-07-12T15:48:13.533983",
+  "completed_at": "2026-07-12T15:48:13.533983",
+  "depends_on": [],
+  "input_refs": [],
+  "output_refs": []
+}

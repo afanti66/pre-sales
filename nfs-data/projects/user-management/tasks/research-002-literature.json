@@ -1,0 +1,14 @@
+{
+  "task_id": "research-002-literature",
+  "phase": "research",
+  "status": "completed",
+  "agent_id": "research",
+  "assignee": "vm2",
+  "actual_tokens": 3651,
+  "description": "文献知识",
+  "started_at": "2026-07-12T15:48:13.533983",
+  "completed_at": "2026-07-12T15:48:13.533983",
+  "depends_on": [],
+  "input_refs": [],
+  "output_refs": []
+}
