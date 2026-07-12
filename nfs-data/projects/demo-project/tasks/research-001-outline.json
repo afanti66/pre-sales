@@ -1,0 +1,37 @@
+{
+  "task_id": "research-001-outline",
+  "phase": "research",
+  "level": "task",
+  "assignee": "vm1",
+  "status": "completed",
+  "depends_on": [],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/input/requirements.md",
+      "description": "标书需求"
+    },
+    {
+      "type": "template",
+      "path": "knowledge/templates/research-outline.md",
+      "description": "大纲模板"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲"
+    },
+    {
+      "path": "projects/demo-project/check/research-001-outline-selfcheck.json",
+      "description": "自检报告"
+    }
+  ],
+  "estimated_tokens": 12000,
+  "actual_tokens": 1609,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "基于标书需求编制方案大纲（含目录结构、各章节核心要点、需补充材料清单）",
+  "started_at": "2026-07-12T15:37:02.644792",
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "research"
+}
