@@ -1,0 +1,33 @@
+{
+  "task_id": "check-ppt",
+  "phase": "ppt",
+  "level": "task",
+  "assignee": "vm2",
+  "status": "completed",
+  "depends_on": [
+    "ppt-001"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/ppt/presentation.pptx",
+      "description": "演示文稿"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/check/ppt-check.json",
+      "description": "检查报告"
+    },
+    {
+      "path": "projects/demo-project/delivery/ppt/",
+      "description": "推送目录"
+    }
+  ],
+  "estimated_tokens": 18000,
+  "actual_tokens": 2134,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "PPT检查+校审：内容正确性+风格统一，通过后推送后台文档",
+  "started_at": "2026-07-12T15:37:04.919290",
+  "completed_at": "2026-07-12T15:37:04.985239"
+}
