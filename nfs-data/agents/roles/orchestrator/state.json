@@ -1,0 +1,37 @@
+{
+  "agent_id": "orchestrator",
+  "name": "编排智能体",
+  "emoji": "🔄",
+  "description": "机械调度者——按规划方案派发/回收/异常处理，不重新规划",
+  "expertise": "任务调度 · 依赖链校验 · 异常处理 · 阶段推进",
+  "status": "idle",
+  "total_dispatched": 18,
+  "total_collected": 18,
+  "last_action": "全管线18/18任务完成",
+  "input_output": {
+    "input": "①规划方案 ②VM实时状态",
+    "actions": [
+      "按规划方案逐一派发任务（依赖链校验→写task状态→标记VM忙）",
+      "监测回收（VM空闲信号→确认产出→标记完成）",
+      "异常处理（超时重派/干预暂停/失败回退）"
+    ],
+    "output": "无新的方案文件，只改变task和VM的状态（pending→running→completed, idle→busy→idle）",
+    "principle": "保持轻量——只读路径和状态，不搬运内容"
+  },
+  "accumulated_knowledge": {
+    "dispatch_strategy": "调研/框架阶段可全并行，设计阶段4并行→2串行→1汇总→检查",
+    "scheduling_pattern": "vm1偏重（6任务），vm2适中（7任务），vm3最轻（5任务）",
+    "check_dependency": "check任务依赖本阶段所有产出任务"
+  },
+  "updated_at": "2026-07-12T15:11:26.317780",
+  "self_check": {
+    "scope": "输入→输出 边界对齐",
+    "checklist": [
+      "☐ 输入覆盖 — 所有输入要素在输出中有对应处理",
+      "☐ 输出符合目标 — 产出内容与职责定义一致",
+      "☐ 无添加 — 不引入输入中不存在的信息（除非有明确依据）"
+    ],
+    "action_on_fail": "自行修正→重复自检→通过后提交",
+    "principle": "自检不通过不提交"
+  }
+}
