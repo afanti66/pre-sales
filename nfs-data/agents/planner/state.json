@@ -1,0 +1,14 @@
+{
+  "agent_id": "planner-001",
+  "role": "project_planner",
+  "status": "idle",
+  "current_project": "demo-project",
+  "token_baselines_loaded": true,
+  "last_plan_at": null,
+  "vm_load": {
+    "vm1": 0,
+    "vm2": 0,
+    "vm3": 0
+  },
+  "total_plans_created": 0
+}
