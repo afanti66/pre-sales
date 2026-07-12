@@ -1,0 +1,108 @@
+{
+  "plan_id": "PLAN-DESIGN-demo",
+  "project": "demo-project",
+  "phase": "design",
+  "level": "stage",
+  "created_at": "2026-07-12T14:05:09.505014",
+  "token_budget": {
+    "total_available": 1048576,
+    "per_vm": 1048576,
+    "safety_margin": 0.3,
+    "usable_per_vm": 733803
+  },
+  "assessment": {
+    "input_size_estimate": 50000,
+    "output_size_estimate": 60000,
+    "total_estimate": 110000,
+    "verdict": "stage_ok_parallel"
+  },
+  "items": [
+    {
+      "task_id": "design-001-requirement",
+      "level": "stage",
+      "assignee": "vm1",
+      "estimated_tokens": 16000,
+      "depends_on": [
+        "framework-001-matrix",
+        "framework-002-business"
+      ],
+      "description": "需求分析章节"
+    },
+    {
+      "task_id": "design-002-overall",
+      "level": "stage",
+      "assignee": "vm2",
+      "estimated_tokens": 20000,
+      "depends_on": [
+        "framework-003-system"
+      ],
+      "description": "总体方案章节"
+    },
+    {
+      "task_id": "design-003-subproject",
+      "level": "stage",
+      "assignee": "vm3",
+      "estimated_tokens": 25000,
+      "depends_on": [
+        "framework-003-system"
+      ],
+      "description": "分项方案章节"
+    },
+    {
+      "task_id": "design-004-common",
+      "level": "stage",
+      "assignee": "vm1",
+      "estimated_tokens": 13000,
+      "depends_on": [
+        "framework-003-system"
+      ],
+      "description": "公共部分章节"
+    },
+    {
+      "task_id": "design-005-prototype",
+      "level": "stage",
+      "assignee": "vm2",
+      "estimated_tokens": 10000,
+      "depends_on": [
+        "design-001-requirement"
+      ],
+      "description": "原型设计章节（需求完成后触发）"
+    },
+    {
+      "task_id": "design-006-budget",
+      "level": "stage",
+      "assignee": "vm3",
+      "estimated_tokens": 12000,
+      "depends_on": [
+        "design-003-subproject"
+      ],
+      "description": "预算方案章节（分项完成后触发）"
+    },
+    {
+      "task_id": "design-007-diagrams",
+      "level": "stage",
+      "assignee": "vm1",
+      "estimated_tokens": 32000,
+      "depends_on": [
+        "design-001-requirement",
+        "design-002-overall",
+        "design-003-subproject",
+        "design-004-common",
+        "design-005-prototype",
+        "design-006-budget"
+      ],
+      "description": "图例汇总（全部完成后触发）"
+    },
+    {
+      "task_id": "check-design",
+      "level": "task",
+      "assignee": "vm2",
+      "estimated_tokens": 18000,
+      "depends_on": [
+        "design-007-diagrams"
+      ],
+      "description": "设计阶段检查+校审"
+    }
+  ],
+  "reasoning": "设计阶段4并行子节点分配3台VM（VM1承担2个轻量级），2串行触发子节点在依赖完成后自动调度，图例汇总等待全部子节点完成。大幅低于1M阈值，无需继续拆分。"
+}
