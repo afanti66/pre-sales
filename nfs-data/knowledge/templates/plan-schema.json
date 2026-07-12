@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["plan_id", "project", "phase", "level", "created_at", "items"],
+  "properties": {
+    "plan_id": {"type": "string"},
+    "project": {"type": "string"},
+    "phase": {"type": "string"},
+    "level": {"type": "string", "enum": ["phase", "stage", "task", "subtask"]},
+    "created_at": {"type": "string"},
+    "token_budget": {
+      "type": "object",
+      "properties": {
+        "total_available": {"type": "integer"},
+        "per_vm": {"type": "integer"},
+        "safety_margin": {"type": "number"},
+        "usable_per_vm": {"type": "integer"}
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "properties": {
+        "input_size_estimate": {"type": "integer"},
+        "output_size_estimate": {"type": "integer"},
+        "total_estimate": {"type": "integer"},
+        "verdict": {"type": "string", "enum": ["level_ok", "need_decompose", "decomposed"]}
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "task_id": {"type": "string"},
+          "level": {"type": "string"},
+          "assignee": {"type": "string"},
+          "estimated_tokens": {"type": "integer"},
+          "depends_on": {"type": "array", "items": {"type": "string"}},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "reasoning": {"type": "string"}
+  }
+}
