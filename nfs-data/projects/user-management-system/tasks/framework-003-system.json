@@ -1,0 +1,37 @@
+{
+  "task_id": "framework-003-system",
+  "name": "系统框架",
+  "type": "framework-system",
+  "phase": "framework",
+  "vm": "vm3",
+  "status": "done",
+  "dependencies": [
+    "framework-002-business"
+  ],
+  "input_files": [],
+  "output_files": [
+    "artifacts/framework/003_system.md"
+  ],
+  "estimated_tokens": 20000,
+  "token_budget": {
+    "max_input": 35200,
+    "max_output": 22400,
+    "estimated": 20000
+  },
+  "self_check_required": true,
+  "check_task_id": "framework-003-system-check",
+  "created_at": "2026-07-12T14:00:36.952172",
+  "started_at": "2026-07-12T14:00:38.148361",
+  "completed_at": "2026-07-12T14:00:38.153546",
+  "result_summary": {
+    "output_files": [
+      "artifacts/framework/003_system.md"
+    ],
+    "token_used": 20000,
+    "self_check": {
+      "content_check": "通过",
+      "format_check": "通过",
+      "notes": null
+    }
+  }
+}
