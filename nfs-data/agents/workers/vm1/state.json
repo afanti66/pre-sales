@@ -1,0 +1,10 @@
+{
+  "agent_id": "worker-vm1",
+  "role": "worker",
+  "vm": "vm1",
+  "status": "idle",
+  "current_task": null,
+  "tasks_completed": 6,
+  "total_tokens_used": 28672,
+  "heartbeat": "2026-07-12T15:48:13.533983"
+}
