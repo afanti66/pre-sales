@@ -69,7 +69,9 @@ python3 -m http.server 8080
 
 ## 宣传视频
 
-[promo-dashboard.mp4](./promo-dashboard.mp4) — 看板功能演示视频。
+<video src="./promo-dashboard.mp4" controls width="100%" style="max-width:720px;border-radius:8px;">
+  您的浏览器不支持视频播放，请 <a href="./promo-dashboard.mp4">下载 MP4 文件</a>。
+</video>
 
 ## 技术栈
 
