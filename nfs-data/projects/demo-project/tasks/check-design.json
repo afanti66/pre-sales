@@ -1,0 +1,38 @@
+{
+  "task_id": "check-design",
+  "phase": "design",
+  "level": "task",
+  "assignee": "vm2",
+  "status": "completed",
+  "depends_on": [
+    "design-007-diagrams"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/solution/proposal_v1.md",
+      "description": "整合方案书"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/png-output/",
+      "description": "PNG图集"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/check/design-check.json",
+      "description": "检查报告"
+    },
+    {
+      "path": "projects/demo-project/delivery/design/",
+      "description": "推送目录"
+    }
+  ],
+  "estimated_tokens": 18000,
+  "actual_tokens": 2432,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "设计阶段检查+校审：内容正确性+术语统一/标题层级/排版风格/编号体系/图表引用格式化，通过后推送后台文档",
+  "started_at": null,
+  "completed_at": "2026-07-12T15:37:04.496346"
+}
