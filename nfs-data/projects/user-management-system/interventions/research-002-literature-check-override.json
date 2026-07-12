@@ -1,0 +1,9 @@
+{
+  "type": "check_override",
+  "target": "research-002-literature-check",
+  "action": "override",
+  "override_result": "approved",
+  "comment": "模拟数据所致，真实LLM产出不受影响",
+  "issued_by": "human",
+  "issued_at": "2026-07-12T14:00:08.792136"
+}
