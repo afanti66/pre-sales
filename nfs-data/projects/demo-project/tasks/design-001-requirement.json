@@ -1,0 +1,45 @@
+{
+  "task_id": "design-001-requirement",
+  "phase": "design",
+  "level": "stage",
+  "assignee": "vm1",
+  "status": "completed",
+  "depends_on": [
+    "framework-001-matrix",
+    "framework-002-business"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/framework/001_matrix.md",
+      "description": "需求矩阵"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/framework/002_business.md",
+      "description": "业务框架"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲·需求章节"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/design/001_requirement.md",
+      "description": "方案书·需求分析章节"
+    },
+    {
+      "path": "projects/demo-project/artifacts/design/mermaid-drafts/001_requirement.md",
+      "description": "需求用例mermaid草稿"
+    }
+  ],
+  "estimated_tokens": 16000,
+  "actual_tokens": 9220,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "按方案大纲需求部分目录，编写需求分析章节（功能/性能/接口/安全需求细化）",
+  "started_at": "2026-07-12T15:37:03.814650",
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "requirements"
+}
