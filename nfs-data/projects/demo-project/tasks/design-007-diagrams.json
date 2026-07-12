@@ -1,0 +1,63 @@
+{
+  "task_id": "design-007-diagrams",
+  "phase": "design",
+  "level": "stage",
+  "assignee": "vm1",
+  "status": "completed",
+  "depends_on": [
+    "design-001-requirement",
+    "design-002-overall",
+    "design-003-subproject",
+    "design-004-common",
+    "design-005-prototype",
+    "design-006-budget"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/mermaid-drafts",
+      "description": "所有mermaid草稿"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/001_requirement.md",
+      "description": "需求章节"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/002_overall.md",
+      "description": "总体章节"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/003_subproject.md",
+      "description": "分项章节"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/004_common.md",
+      "description": "公共章节"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/design/drawio-src/",
+      "description": "drawio源码目录"
+    },
+    {
+      "path": "projects/demo-project/artifacts/design/png-output/",
+      "description": "PNG输出目录"
+    },
+    {
+      "path": "projects/demo-project/artifacts/solution/proposal_v1.md",
+      "description": "整合方案书（含PNG引用）"
+    }
+  ],
+  "estimated_tokens": 32000,
+  "actual_tokens": 4548,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "图例汇总：收mermaid草稿→统一编号/规范风格/校验一致性→转drawio→导出PNG→插入方案书对应位置→输出整合方案书",
+  "started_at": null,
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "diagrams"
+}
