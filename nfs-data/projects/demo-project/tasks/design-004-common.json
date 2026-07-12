@@ -1,0 +1,39 @@
+{
+  "task_id": "design-004-common",
+  "phase": "design",
+  "level": "stage",
+  "assignee": "vm1",
+  "status": "completed",
+  "depends_on": [
+    "framework-003-system"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/framework/003_system.md",
+      "description": "系统框架"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲·公共章节"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/design/004_common.md",
+      "description": "方案书·公共部分章节"
+    },
+    {
+      "path": "projects/demo-project/artifacts/design/mermaid-drafts/004_common.md",
+      "description": "部署拓扑mermaid草稿"
+    }
+  ],
+  "estimated_tokens": 13000,
+  "actual_tokens": 3116,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "按方案大纲公共部分目录，编写公共部分章节（日志/认证/监控/部署等基础设施）",
+  "started_at": null,
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "common"
+}
