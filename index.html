@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>售前智能体管线·看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#c9d1d9;height:100vh;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh}
+.dashboard{display:grid;grid-template-columns:280px 1fr 320px;gap:0;flex:1;min-height:0;transition:grid-template-columns .3s}
+.dashboard.collapse-left{grid-template-columns:0px 1fr 320px}
+.dashboard.collapse-right{grid-template-columns:280px 1fr 0px}
+.dashboard.collapse-left.collapse-right,.dashboard.collapse-both{grid-template-columns:0px 1fr 0px}
+.panel{overflow-y:auto;padding:16px;background:#161b22;border-right:1px solid #30363d;overflow-x:hidden;transition:padding .3s,opacity .3s}
+.panel.collapsed{padding:0;overflow:hidden;opacity:0;width:0;border:0}
+.panel:last-child{border-right:none;border-left:1px solid #30363d}
+.panel-header{font-size:14px;font-weight:600;color:#58a6ff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #30363d;display:flex;align-items:center;justify-content:space-between}
+.refresh-btn{background:#21262d;border:1px solid #30363d;color:#8b949e;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer}
+.refresh-btn:hover{background:#30363d;color:#c9d1d9}
+.card{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:12px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:600;color:#c9d1d9;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.badge-passed{background:#1b5e20;color:#81c784}
+.badge-running{background:#e65100;color:#ffb74d}
+.badge-idle{background:#1a237e;color:#90caf9}
+.badge-busy{background:#b71c1c;color:#ef9a9a}
+.card-stat{font-size:12px;color:#8b949e;margin-bottom:3px}
+.card-stat span.value{color:#c9d1d9;font-weight:600}
+.progress{background:#21262d;border-radius:6px;height:6px;margin:8px 0;overflow:hidden}
+.progress-bar{height:100%;border-radius:6px}
+.progress-green{background:#238636}
+.progress-orange{background:#d29922}
+.progress-blue{background:#1f6feb}
+.agent-card{border:1px solid #30363d;border-radius:8px;padding:12px;margin-bottom:8px;background:#0d1117}
+.agent-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.agent-name{font-size:13px;font-weight:600;color:#c9d1d9}
+.agent-role{font-size:11px;color:#8b949e;margin-bottom:6px}
+.agent-detail{font-size:11px;color:#8b949e;line-height:1.6}
+.center-panel{overflow-y:auto;padding:16px;background:#0d1117;position:relative}
+.tab-bar{display:flex;align-items:center;gap:16px;padding:0 0 8px 0;border-bottom:1px solid #30363d;margin-bottom:16px}
+.tab-btn{background:transparent;border:none;color:#8b949e;padding:8px 16px;cursor:pointer;font-size:13px;border-bottom:2px solid transparent}
+.tab-btn.active{color:#c9d1d9;border-bottom-color:#58a6ff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.task-item{font-size:11px;color:#8b949e;padding:3px 0;display:flex;align-items:center;gap:6px}
+.task-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.task-dot.done{background:#238636}
+.vm-load-bar{height:4px;background:#21262d;border-radius:4px;margin:4px 0;overflow:hidden}
+.vm-load-fill{height:100%;border-radius:4px}
+.footer{background:#161b22;border-top:1px solid #30363d;padding:6px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.footer span{font-size:10px;color:#484f58}
+.toggle-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:16px;height:40px;background:#21262d;border:1px solid #30363d;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:#8b949e;user-select:none}
+.toggle-left{left:0;border-left:none;border-radius:0 6px 6px 0}
+.toggle-right{right:0;border-right:none;border-radius:6px 0 0 6px}
+.sec-body{display:none;margin-top:6px}
+.delivery-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px;border-bottom:1px solid #21262d}
+.vm-bar{display:flex;gap:8px;margin-top:12px}
+.vm-item{flex:1;text-align:center;padding:10px;background:#161b22;border:1px solid #30363d;border-radius:8px}
+.phase-card{border-left:3px solid;padding:10px 12px;margin-bottom:8px}
+.flow-node{position:relative;padding:12px;margin-bottom:8px;background:#161b22;border:1px solid #30363d;border-radius:8px}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0d1117}
+::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
+
+/* 弹窗 */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.show{display:flex}
+.modal-box{background:#161b22;border:1px solid #30363d;border-radius:12px;max-width:520px;width:90%;max-height:70vh;overflow-y:auto;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.modal-box h2{font-size:16px;color:#c9d1d9;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.modal-close{float:right;cursor:pointer;color:#8b949e;font-size:18px;line-height:1}
+.modal-close:hover{color:#c9d1d9}
+.modal-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #21262d;font-size:12px}
+.modal-row-label{color:#8b949e}
+.modal-row-value{color:#c9d1d9;font-weight:600}
+.modal-section{margin-top:14px}
+.modal-section h3{font-size:13px;color:#58a6ff;margin-bottom:8px}
+.modal-task{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px;color:#8b949e}
+.modal-task .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.modal-task .dot.green{background:#238636}
+.modal-task .dot.orange{background:#d29922}
+.modal-task .dot.gray{background:#30363d}
+@media(max-width:1200px){.dashboard{grid-template-columns:220px 1fr 260px}}
+@media(max-width:900px){.dashboard{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div style="background:#161b22;border-bottom:1px solid #30363d;padding:8px 20px;display:flex;align-items:center;gap:16px;flex-shrink:0" id="top-nav">
+    <span style="font-size:15px;font-weight:700;color:#58a6ff;letter-spacing:1px">⚡ 售前智能体系统</span>
+    <span style="font-size:11px;color:#8b949e;border-left:1px solid #30363d;padding-left:16px">Pre-Sales Agent Pipeline v1.0</span>
+    <span style="margin-left:auto;font-size:11px;color:#484f58" id="nav-status">加载中...</span>
+    <div onclick="toggleTop()" style="cursor:pointer;font-size:10px;color:#484f58;padding:2px 6px;border:1px solid #30363d;border-radius:4px;user-select:none" id="toggle-top-btn">▲</div>
+  </div>
+
+  <div class="dashboard" id="dashboard-grid">
+    <div class="panel" id="left-panel">
+      <div class="panel-header">
+        <span id="left-panel-title">📊 项目</span>
+        <div style="display:flex;gap:4px">
+          <button class="refresh-btn" onclick="switchLeftTab('status')" id="tab-status-btn">📊 阶段</button>
+          <button class="refresh-btn" onclick="switchLeftTab('docs')" id="tab-docs-btn">📄 标书</button>
+        </div>
+      </div>
+      <div id="project-content"><div class="card"><div class="card-title">加载中...</div></div></div>
+    </div>
+
+    <div class="center-panel" id="center-panel">
+      <div onclick="togglePanel('left')" class="toggle-btn toggle-left" id="toggle-left-btn">◀</div>
+      <div onclick="togglePanel('right')" class="toggle-btn toggle-right" id="toggle-right-btn">▶</div>
+      <div class="tab-bar">
+        <span style="font-size:14px;font-weight:600;color:#58a6ff;letter-spacing:.5px">🔧 流程</span>
+        <div style="display:flex;gap:4px;margin-left:auto">
+          <button class="tab-btn active" onclick="switchTab('topology',this)">🔗 节点域</button>
+          <button class="tab-btn" onclick="switchTab('gantt',this)">📅 时空域</button>
+        </div>
+      </div>
+      <div id="tab-topology" class="tab-content active"><div class="topology" id="topology-svg" style="max-height:450px;overflow-y:auto"></div></div>
+      <div id="tab-gantt" class="tab-content"><div id="gantt-chart"></div></div>
+    </div>
+
+    <div class="panel" id="right-panel">
+      <div class="panel-header">
+        <span>📊 面板</span>
+        <div style="display:flex;gap:4px">
+          <button class="refresh-btn" onclick="switchRightTab('agents')" id="rtab-agents-btn" style="opacity:1">👥 团队</button>
+          <button class="refresh-btn" onclick="switchRightTab('vms')" id="rtab-vms-btn" style="opacity:0.5">🖥️ 算力</button>
+        </div>
+      </div>
+      <div id="agent-content"><div class="card"><div class="card-title">加载中...</div></div></div>
+      <div id="vm-tab-content" style="display:none"><div id="vm-content"><div class="card"><div class="card-title">加载中...</div></div></div></div>
+      <div class="panel-header" style="margin-top:16px"><span>📦 推送</span></div>
+      <div id="delivery-content"><div class="card"><div class="card-title">加载中...</div></div></div>
+    </div>
+  </div>
+
+  <div class="footer" id="app-footer">
+    <span>© 2026 售前智能体系统 · Nous Research Hermes Agent</span>
+    <span>数据目录: nfs-data/ | 状态: <span id="footer-status">运行中</span>
+      <span onclick="toggleBottom()" style="cursor:pointer;font-size:10px;color:#484f58;padding:2px 6px;border:1px solid #30363d;border-radius:4px;margin-left:8px;user-select:none" id="toggle-bottom-btn">▼</span>
+    </span>
+  </div>
+</div>
+
+<script src="lib/d3.v7.min.js"></script>
+<script>
+const API = 'http://192.168.2.9:8081';
+
+// ===== 面板切换 =====
+let leftTab = 'status';
+function switchLeftTab(tab) {
+  leftTab = tab;
+  document.getElementById('tab-status-btn').style.opacity = tab==='status'?'1':'0.5';
+  document.getElementById('tab-docs-btn').style.opacity = tab==='docs'?'1':'0.5';
+  document.getElementById('left-panel-title').textContent = tab==='status'?'📊 项目':'📄 标书';
+  if (tab==='status') loadProject(); else loadDocs();
+}
+
+function switchTab(name,btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  else document.querySelector('.tab-btn[onclick*="'+name+'"]')&&document.querySelector('.tab-btn[onclick*="'+name+'"]').classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name==='topology') drawTopology();
+  if (name==='gantt') drawGantt();
+}
+
+let rightTab='agents';
+function switchRightTab(tab) {
+  rightTab=tab;
+  document.getElementById('rtab-agents-btn').style.opacity=tab==='agents'?'1':'0.5';
+  document.getElementById('rtab-vms-btn').style.opacity=tab==='vms'?'1':'0.5';
+  document.getElementById('agent-content').style.display=tab==='agents'?'block':'none';
+  document.getElementById('vm-tab-content').style.display=tab==='vms'?'block':'none';
+  if (tab==='vms') loadVMsTab();
+}
+
+function togglePanel(side) {
+  const d=document.getElementById('dashboard-grid');
+  const p=document.getElementById(side==='left'?'left-panel':'right-panel');
+  const b=document.getElementById(side==='left'?'toggle-left-btn':'toggle-right-btn');
+  const c=p.classList.contains('collapsed');
+  p.classList.toggle('collapsed');
+  d.classList.toggle('collapse-'+side);
+  b.textContent=side==='left'?(c?'◀':'▶'):(c?'▶':'◀');
+  // CSS transition完成后重绘活动图表
+  var onEnd=function(){
+    d.removeEventListener('transitionend',onEnd);
+    var active=document.querySelector('.tab-content.active');
+    if(active&&active.id==='tab-topology')drawTopology();
+    else if(active&&active.id==='tab-gantt')drawGantt();
+  };
+  d.addEventListener('transitionend',onEnd);
+}
+
+function toggleTop() {
+  const nav=document.getElementById('top-nav');
+  const btn=document.getElementById('toggle-top-btn');
+  const c=nav.style.height==='0px'||nav.style.display==='none';
+  nav.style.display=c?'flex':'none';
+  btn.textContent=c?'▲':'▼';
+}
+
+function toggleBottom() {
+  const f=document.getElementById('app-footer');
+  const btn=document.getElementById('toggle-bottom-btn');
+  const c=f.style.display==='none';
+  f.style.display=c?'flex':'none';
+  btn.textContent=c?'▼':'▲';
+}
+
+// 窗口resize刷新数据（图表重绘由ResizeObserver自动处理）
+var resizeTimer;
+window.onresize=function(){
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(function(){refreshAll();},300);
+};
+
+function toggleSection(el) {
+  const b=el.querySelector('.sec-body');
+  if(b) b.style.display=b.style.display==='none'?'block':'none';
+}
+
+function toggleGantt(el) {
+  const s=el.nextElementSibling;
+  if(s&&s.classList.contains('gantt-sub')) s.style.display=s.style.display==='none'?'block':'none';
+}
+
+// ===== API =====
+async function fetchJSON(url) {
+  try{const r=await fetch(url);return await r.json()}catch(e){return null}
+}
+
+// ===== 加载数据 =====
+async function loadProject() {
+  const p=(await fetchJSON(API+'/api/projects'))||[];
+  const el=document.getElementById('project-content');
+  if(!p.length){el.innerHTML='<div class="card"><div class="card-title">无项目</div></div>';return}
+  const proj=p[0]||{};
+  let html=`<div class="card"><div class="card-title">${proj.name||'项目'}</div>
+    <div class="card-stat">状态: <span class="value">${proj.status||'unknown'}</span></div>
+    <div class="card-stat">阶段: <span class="value">${proj.current_phase||'N/A'}</span></div>
+    <div class="card-stat">更新: <span class="value">${(proj.updated_at||'').slice(0,19).replace('T',' ')}</span></div></div>`;
+  const phases=proj.phases||{};
+  for(const[name,info]of Object.entries(phases)){
+    const icons={research:'🔎',framework:'🏗️',design:'✏️',ppt:'📽️'};
+    const cls=info.status==='passed'||info.status==='completed'?'passed':'running';
+    html+=`<div class="phase-card ${name}" style="border-left-color:${name==='research'?'#58a6ff':name==='framework'?'#d29922':name==='design'?'#3fb950':'#da3633'}">
+      <div class="agent-header"><span>${icons[name]||'📋'} ${name.charAt(0).toUpperCase()+name.slice(1)}</span>
+      <span style="font-size:11px;color:${cls==='passed'?'#3fb950':'#f0883e'}">${info.status||'pending'}</span></div>
+      <div class="progress"><div class="progress-bar ${cls==='passed'?'progress-green':'progress-orange'}" style="width:${info.progress||0}%"></div></div>
+      <div style="font-size:11px;color:#8b949e">${info.progress||0}% 完成</div></div>`;
+  }
+  el.innerHTML=html;
+}
+
+async function loadDocs() {
+  const tree=await fetchJSON(API+'/api/artifacts/tree/demo-project');
+  const el=document.getElementById('project-content');
+  if(!tree||!tree.categories){el.innerHTML='<div class="card"><div class="card-title">无产出文档</div></div>';return}
+  const sb=s=>{const m={passed:'✅ 完成',running:'🔄 执行中',pending:'⏳ 待处理'};return m[s]||'⏳'}
+  const ss=f=>f&&f.length?f.every(x=>x.files?x.files.every(y=>y.status==='passed'):(x.status==='passed'||x.status==='completed'))?'passed':'running':'pending';
+  let html='';
+  for(const[cn,cat]of Object.entries(tree.categories)){
+    html+=`<div style="font-size:11px;color:#8b949e;margin:8px 0 4px">${cat.icon} ${cn}</div>`;
+    if(cat.sections) for(const sec of cat.sections){
+      const sss=ss(sec.files);
+      html+=`<div class="agent-card" style="padding:8px 10px;margin-bottom:4px;cursor:pointer" onclick="toggleSection(this)">
+        <div class="agent-header"><span class="agent-name" style="font-size:12px">${sec.name}</span><span style="font-size:10px">${sb(sss)}</span></div>
+        <div class="sec-body" style="margin-top:6px">`;
+      for(const f of sec.files){
+        if(f.files){
+          html+=`<div style="font-size:11px;color:#8b949e;margin:4px 0 2px 4px;cursor:pointer" onclick="event.stopPropagation();toggleSection(this)">📁 ${f.name}/</div>
+            <div class="sec-body" style="margin-left:8px">`;
+          for(const sf of f.files) html+=`<div class="task-item" onclick="openDoc('${sf.path}')" style="cursor:pointer"><span class="task-dot done"></span>${sf.name} <span style="color:#484f58;font-size:10px">(${(sf.size/1000).toFixed(1)}K)</span><span style="margin-left:auto;font-size:10px">${sb(sf.status)}</span></div>`;
+          html+=`</div>`;
+        } else {
+          html+=`<div class="task-item" onclick="openDoc('${f.path}')" style="cursor:pointer"><span class="task-dot done"></span>${f.name} <span style="color:#484f58;font-size:10px">(${(f.size/1000).toFixed(1)}K)</span><span style="margin-left:auto;font-size:10px">${sb(f.status)}</span></div>`;
+        }
+      }
+      html+=`</div></div>`;
+    }
+    if(cat.items){
+      const ad=cat.items.every(i=>i.status==='passed'||i.status==='completed');
+      html+=`<div class="agent-card" style="padding:8px 10px;margin-bottom:4px;cursor:pointer" onclick="toggleSection(this)">
+        <div class="agent-header"><span class="agent-name" style="font-size:12px">${cn}</span><span style="font-size:10px">${sb(ad?'passed':'pending')}</span></div>
+        <div class="sec-body">`;
+      for(const item of cat.items) html+=`<div class="task-item" onclick="openDoc('${item.path}')" style="cursor:pointer"><span class="task-dot done"></span>${item.name} <span style="color:#484f58;font-size:10px">(${(item.size/1000).toFixed(1)}K)</span><span style="margin-left:auto;font-size:10px">${sb(item.status)}</span></div>`;
+      html+=`</div></div>`;
+    }
+  }
+  el.innerHTML=html;
+}
+
+async function openDoc(path) {
+  const d=await fetchJSON(API+'/api/read?path='+encodeURIComponent(path));
+  if(!d||!d.content){alert('无法读取');return}
+  const o=document.createElement('div');
+  o.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center';
+  o.onclick=function(e){if(e.target===this)this.remove()};
+  o.innerHTML=`<div style="background:#161b22;border:1px solid #30363d;border-radius:12px;width:90%;height:85%;max-width:900px;display:flex;flex-direction:column;overflow:hidden" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #30363d">
+      <span style="font-size:14px;font-weight:600;color:#c9d1d9">${d.name}</span>
+      <button onclick="this.closest('#\\\\u0000').parentElement.remove()" style="background:#21262d;border:1px solid #30363d;color:#c9d1d9;border-radius:6px;padding:4px 12px;cursor:pointer">✕ 关闭</button>
+    </div>
+    <div style="flex:1;overflow:auto;padding:16px;font-size:13px;line-height:1.7;color:#c9d1d9;white-space:pre-wrap;font-family:monospace">${d.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+  </div>`;
+  document.body.appendChild(o);
+}
+
+async function loadAgents() {
+  const s=await fetchJSON(API+'/api/agents/summary');
+  const el=document.getElementById('agent-content');
+  if(!s){el.innerHTML='<div class="card"><div class="card-title">无数据</div></div>';return}
+  let html='<div style="font-size:11px;color:#8b949e;margin:4px">━ 策略层 ━</div>';
+  for(const a of s.strategy||[]){
+    const bg=a.status==='idle'?'idle':'running';
+    html+=`<div class="agent-card"><div class="agent-header"><span class="agent-name">${a.emoji} ${a.name}</span><span class="badge-${bg}" style="padding:1px 8px;border-radius:10px;font-size:10px">${a.status}</span></div><div class="agent-detail">${a.detail||''}</div></div>`;
+  }
+  html+='<div style="font-size:11px;color:#8b949e;margin:4px">━ 知识层 ━</div>';
+  const k=s.knowledge||{};
+  html+=`<div class="agent-card"><div class="agent-header"><span class="agent-name">${k.emoji||'🧠'} ${k.name||'知识智能体'}</span><span class="badge-idle" style="padding:1px 8px;border-radius:10px;font-size:10px">${k.status||'idle'}</span></div><div class="agent-detail">${k.detail||'历史方案·模板·基线'}</div></div>`;
+  html+='<div style="font-size:11px;color:#8b949e;margin:4px">━ 业务层 ━</div>';
+  for(const a of s.business||[]){
+    const bg=a.status==='idle'?'idle':a.status==='passed'?'passed':'running';
+    html+=`<div class="agent-card"><div class="agent-header"><span class="agent-name">${a.emoji} ${a.name}</span><span class="badge-${bg}" style="padding:1px 8px;border-radius:10px;font-size:10px">${a.status}</span></div>
+    <div class="agent-role">${a.description||''}</div><div class="agent-detail">${a.tasks_completed||0}任务 · ${((a.total_tokens_used||0)/1000).toFixed(1)}K · ${a.assigned_to||'N/A'}</div></div>`;
+  }
+  const c=s.checker||{};
+  html+=`<div style="font-size:11px;color:#8b949e;margin:4px">━ 质控 ━</div>`;
+  html+=`<div class="agent-card"><div class="agent-header"><span class="agent-name">${c.emoji} ${c.name}</span><span class="badge-${c.status==='passed'?'passed':c.status==='idle'?'idle':'running'}" style="padding:1px 8px;border-radius:10px;font-size:10px">${c.status||'idle'}</span></div><div class="agent-detail">${c.detail||''}</div></div>`;
+  el.innerHTML=html;
+}
+
+async function loadVMsTab() {
+  const[vd,sum]=await Promise.all([fetchJSON(API+'/api/vms'),fetchJSON(API+'/api/agents/summary')]);
+  const el=document.getElementById('vm-content');
+  if(!vd||!vd.vms){el.innerHTML='<div class="card"><div class="card-title">无数据</div></div>';return}
+  const am={};
+  if(sum) for(const a of[...(sum.strategy||[]),sum.knowledge,...(sum.business||[]),sum.checker].filter(Boolean)){
+    const vm=a.assigned_to||'N/A';if(!am[vm])am[vm]=[];am[vm].push(a);
+  }
+  let h='';
+  for(const vm of vd.vms){
+    const id=vm.name.toLowerCase(),pct=vm.load==='busy'?80:10,fc=vm.load==='idle'?'#238636':'#da3633';
+    const ag=am[id]||[],tt=ag.reduce((s,a)=>s+(a.tasks_completed||0),0),tk=ag.reduce((s,a)=>s+(a.total_tokens_used||0),0);
+    h+=`<div class="agent-card"><div class="agent-header"><span class="agent-name" style="font-size:13px">🖥️ ${vm.name}</span><span style="font-size:10px;color:${vm.load==='idle'?'#3fb950':'#f0883e'}">${vm.load==='idle'?'✅ 空闲':'🔄 繁忙'}</span></div>
+    <div class="vm-load-bar"><div class="vm-load-fill" style="width:${pct}%;background:${fc}"></div></div>
+    <div style="font-size:10px;color:#8b949e;margin-bottom:6px">${ag.length}个智能体 · ${tt}任务 · ${(tk/1000).toFixed(1)}K</div>`;
+    for(const a of ag) h+=`<div class="task-item"><span class="task-dot done"></span>${a.emoji||'🤖'} ${a.name}<span style="margin-left:auto;font-size:10px;color:#484f58">${a.tasks_completed||0}任务 · ${((a.total_tokens_used||0)/1000).toFixed(1)}K</span></div>`;
+    h+=`</div>`;
+  }
+  el.innerHTML=h;
+}
+
+async function loadDelivery() {
+  const st=await fetchJSON(API+'/api/projects/demo-project/status');
+  const el=document.getElementById('delivery-content');
+  if(!st){el.innerHTML='<div class="card"><div class="card-title">无数据</div></div>';return}
+  const dl=st.delivery||{};
+  let h='<div class="card">';
+  for(const[ph,info]of Object.entries(dl)) h+=`<div class="delivery-item"><span>${ph}</span><span style="color:${info.pushed?'#3fb950':'#d29922'}">${info.pushed?'✅ '+info.version:'⏳ 未推送'}</span></div>`;
+  h+='</div>';el.innerHTML=h;
+}
+
+// ===== 弹窗 =====
+function openModal(html){
+  document.getElementById('modal-box').innerHTML=html;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+
+// ===== 拓扑图 =====
+var topoPhaseMap={research:'research',framework:'framework',requirements:'design',architecture:'design',
+  subproject:'design',common:'design',prototype:'design',budget:'design',diagrams:'design',ppt:'ppt',
+  planner:'strategy',orchestrator:'strategy',checker:'quality'};
+var topoNodeNames={planner:'规划智能体',orchestrator:'编排智能体',research:'调研阶段',
+  framework:'框架阶段',requirements:'需求分析',architecture:'总体方案',
+  subproject:'分项方案',common:'公共部分',prototype:'原型设计',budget:'预算方案',
+  diagrams:'图例汇总',ppt:'PPT生成',checker:'检查校审'};
+var topoPhaseNames={research:'调研',framework:'框架',design:'设计',ppt:'PPT',strategy:'策略',quality:'质控'};
+var topoEmojis={research:'',framework:'',design:'',ppt:'',strategy:'',quality:''};
+
+async function drawTopology() {
+  var el=document.getElementById('topology-svg');
+  el.innerHTML='';
+  var w=el.clientWidth||700;
+  if(w<50)return;
+
+  // 获取实时数据
+  var projects=[],flowTasks=[];
+  try{
+    var p=await fetchJSON(API+'/api/projects');
+    if(p)projects=p;
+    var f=await fetchJSON(API+'/api/projects/demo-project/flow');
+    if(f&&f.tasks)flowTasks=f.tasks;
+  }catch(e){}
+
+  // 取第一个active项目的阶段状态
+  var project=projects?projects.filter(function(pj){return pj.status==='active'||pj.status==='running';})[0]:null;
+  if(!project)project=projects?projects[0]:null;
+  var phases=project?project.phases||{}:{};
+
+  // 获取状态: nodeId → {status, tasks}
+  function getNodeStatus(nodeId){
+    var ph=topoPhaseMap[nodeId];
+    if(ph==='strategy'||ph==='quality'){
+      var pf=ph==='strategy'?'planner':'check';
+      var tasks=flowTasks.filter(function(t){return t.task_id&&t.task_id.startsWith(pf);});
+      var done=tasks.filter(function(t){return t.status==='completed';}).length;
+      var allDone=tasks.length>0&&done===tasks.length;
+      return {status:allDone?'completed':(done>0?'running':'pending'),progress:tasks.length>0?Math.round(done/tasks.length*100):0,tasks:tasks};
+    }
+    var phData=phases[ph];
+    if(phData){
+      var status=phData.status||'pending';
+      var progress=phData.progress||0;
+      var tasks=flowTasks.filter(function(t){return t.phase===ph||(t.task_id&&t.task_id.startsWith(ph));});
+      return {status:status,progress:progress,tasks:tasks};
+    }
+    return {status:'pending',progress:0,tasks:[]};
+  }
+
+  function statusColor(s){
+    if(s==='passed'||s==='completed')return '#238636';
+    if(s==='running'||s==='in_progress')return '#d29922';
+    return '#30363d';
+  }
+  function statusText(s){
+    if(s==='passed'||s==='completed')return '已完成';
+    if(s==='running'||s==='in_progress')return '进行中';
+    return '待开始';
+  }
+
+  var cx=Math.round(w/2);
+  var gap=1.5;
+  var base=35;
+  var nodes=[
+    ['planner','[规划]',cx,base],
+    ['orchestrator','[编排]',cx,Math.round(base+40*gap)],
+    ['research','[调研]',cx,Math.round(base+40*gap+50*gap)],
+    ['framework','[框架]',cx,Math.round(base+40*gap+50*gap+40*gap)],
+    ['requirements','[需求分析]',cx-160,Math.round(base+40*gap+50*gap+40*gap+80*gap)],
+    ['architecture','[总体方案]',cx-55,Math.round(base+40*gap+50*gap+40*gap+80*gap)],
+    ['subproject','[分项方案]',cx+55,Math.round(base+40*gap+50*gap+40*gap+80*gap)],
+    ['common','[公共部分]',cx+160,Math.round(base+40*gap+50*gap+40*gap+80*gap)],
+    ['prototype','[原型设计]',cx-160,Math.round(base+40*gap+50*gap+40*gap+80*gap+75*gap)],
+    ['budget','[预算方案]',cx+55,Math.round(base+40*gap+50*gap+40*gap+80*gap+75*gap)],
+    ['diagrams','[图例汇总]',cx,Math.round(base+40*gap+50*gap+40*gap+80*gap+75*gap+80*gap)],
+    ['ppt','[PPT]',cx,Math.round(base+40*gap+50*gap+40*gap+80*gap+75*gap+80*gap+40*gap)],
+    ['checker','[检查校审]',cx,Math.round(base+40*gap+50*gap+40*gap+80*gap+75*gap+80*gap+40*gap+50*gap)]
+  ];
+
+  var nodeStatus={};
+  nodes.forEach(function(n){nodeStatus[n[0]]=getNodeStatus(n[0]);});
+
+  var edges=[
+    ['planner','orchestrator'],
+    ['orchestrator','research'],
+    ['research','framework'],
+    ['framework','requirements'],['framework','architecture'],['framework','subproject'],['framework','common'],
+    ['requirements','prototype'],['subproject','budget'],
+    ['prototype','diagrams'],['budget','diagrams'],
+    ['requirements','diagrams'],['architecture','diagrams'],['subproject','diagrams'],['common','diagrams'],
+    ['diagrams','ppt'],
+    ['research','checker'],['framework','checker'],['diagrams','checker'],['ppt','checker']
+  ];
+
+  var nodeMap={};
+  nodes.forEach(function(n){nodeMap[n[0]]={x:n[2],y:n[3]};});
+
+  var h=750;
+  var svg=d3.select(el).append('svg').attr('width',w).attr('height',h);
+  var defs=svg.append('defs');
+  defs.append('marker').attr('id','ar').attr('viewBox','0 -5 10 10').attr('refX',22).attr('refY',0)
+    .attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto')
+    .append('path').attr('d','M0,-5L10,0L0,5').attr('fill','#58a6ff');
+  defs.append('marker').attr('id','ar2').attr('viewBox','0 -5 10 10').attr('refX',22).attr('refY',0)
+    .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+    .append('path').attr('d','M0,-5L10,0L0,5').attr('fill','#30363d');
+
+  function addSectionLabel(y,text,color){
+    svg.append('text').text(text).attr('x',cx).attr('y',y)
+      .attr('text-anchor','middle').attr('fill',color).attr('font-size','10').attr('font-weight','bold')
+      .attr('letter-spacing','2');
+    svg.append('line').attr('x1',cx-35).attr('y1',y+3).attr('x2',cx+35).attr('y2',y+3)
+      .attr('stroke',color).attr('stroke-width',1).attr('opacity',.5);
+  }
+  addSectionLabel(18,'策略层','#d29922');
+  addSectionLabel(147,'业务层','#58a6ff');
+  addSectionLabel(693,'质控层','#3fb950');
+
+  [18,147,693].forEach(function(y,i){
+    var colors=['#d29922','#58a6ff','#3fb950'];
+    var hs=[100,340,46];
+    svg.append('rect').attr('x',10).attr('y',y-8).attr('width',w-20).attr('height',hs[i])
+      .attr('fill','#161b22').attr('rx','6').attr('opacity',.08);
+  });
+
+  edges.forEach(function(e){
+    var s=nodeMap[e[0]],t=nodeMap[e[1]];
+    if(!s||!t)return;
+    var isQualityEdge=(e[1]==='checker');
+    svg.append('line').attr('x1',s.x).attr('y1',s.y+14)
+      .attr('x2',t.x).attr('y2',t.y-14)
+      .attr('stroke',isQualityEdge?'#30363d':'#58a6ff')
+      .attr('stroke-width',isQualityEdge?1:1.5)
+      .attr('stroke-dasharray',isQualityEdge?'4,3':'none')
+      .attr('marker-end',isQualityEdge?'url(#ar2)':'url(#ar)')
+      .attr('opacity',.65);
+  });
+
+  // 节点（状态色+进度条+点击弹窗）
+  nodes.forEach(function(n){
+    var id=n[0],label=n[1],x=n[2],y=n[3];
+    var st=nodeStatus[id];
+    var color=statusColor(st.status);
+
+    var g=svg.append('g').attr('class','topo-node').style('cursor','pointer')
+      .datum({id:id,x:x,y:y});
+
+    g.append('circle').attr('cx',x-44).attr('cy',y-14).attr('r',4).attr('fill',color);
+    g.append('rect').attr('rx',4).attr('width',80).attr('height',26)
+      .attr('x',x-40).attr('y',y-13)
+      .attr('fill','#1f6feb').attr('opacity',.92)
+      .attr('stroke','rgba(255,255,255,.1)').attr('stroke-width',1);
+    g.append('text').text(label).attr('x',x).attr('y',y+1)
+      .attr('text-anchor','middle').attr('dominant-baseline','middle')
+      .attr('fill','#fff').attr('font-size','10').attr('font-weight','600');
+    g.append('rect').attr('x',x-38).attr('y',y+14).attr('width',76*st.progress/100).attr('height',2)
+      .attr('fill',color).attr('rx','1');
+
+    g.on('click',function(e,d){
+      var st2=nodeStatus[d.id];
+      var ph=topoPhaseMap[d.id];
+      var phName=topoPhaseNames[ph]||ph;
+      var emoji=topoEmojis[ph]||'📋';
+      var html='<span class="modal-close" onclick="closeModal()">✕</span>';
+      html+='<h2>'+emoji+' '+topoNodeNames[d.id]+'</h2>';
+      html+='<div class="modal-row"><span class="modal-row-label">阶段</span><span class="modal-row-value">'+phName+'</span></div>';
+      html+='<div class="modal-row"><span class="modal-row-label">状态</span><span class="modal-row-value">'+statusText(st2.status)+'</span></div>';
+      html+='<div class="modal-row"><span class="modal-row-label">进度</span><span class="modal-row-value">'+st2.progress+'%</span></div>';
+      if(st2.tasks&&st2.tasks.length>0){
+        var done=st2.tasks.filter(function(t){return t.status==='completed';}).length;
+        html+='<div class="modal-row"><span class="modal-row-label">任务</span><span class="modal-row-value">'+done+'/'+st2.tasks.length+'</span></div>';
+        html+='<div class="modal-section"><h3>📋 任务清单</h3>';
+        st2.tasks.forEach(function(t){
+          var dotCls=t.status==='completed'?'green':(t.status==='running'||t.status==='in_progress'?'orange':'gray');
+          html+='<div class="modal-task"><span class="dot '+dotCls+'"></span><span>'+(t.description||t.task_id||'')+'</span></div>';
+        });
+        html+='</div>';
+      }
+      if(st2.tasks&&st2.tasks.length>0){
+        var agents={};
+        st2.tasks.forEach(function(t){if(t.assignee)agents[t.assignee]=true;});
+        var agentList=Object.keys(agents);
+        if(agentList.length>0){
+          html+='<div class="modal-row"><span class="modal-row-label">执行智能体</span><span class="modal-row-value">'+agentList.join(', ')+'</span></div>';
+        }
+      }
+      openModal(html);
+    });
+  });
+
+  svg.append('text').text('4 并 行').attr('x',cx).attr('y',290)
+    .attr('text-anchor','middle').attr('fill','#d29922').attr('font-size','8').attr('font-weight','bold');
+  svg.append('text').text('串行触发').attr('x',cx-190).attr('y',407)
+    .attr('text-anchor','end').attr('fill','#8b949e').attr('font-size','8');
+  svg.append('text').text('串行触发').attr('x',cx+190).attr('y',407)
+    .attr('text-anchor','start').attr('fill','#8b949e').attr('font-size','8');
+
+  var totalPhases=Object.keys(phases).length;
+  var donePhases=Object.values(phases).filter(function(v){return v.status==='passed'||v.status==='completed';}).length;
+  svg.append('text').text('阶段: '+donePhases+'/'+totalPhases+' 完成').attr('x',20).attr('y',h-6)
+    .attr('fill','#484f58').attr('font-size','8');
+  svg.append('text').text('(绿)已完成 (橙)进行中 (灰)待开始').attr('x',cx).attr('y',h-6)
+    .attr('text-anchor','middle').attr('fill','#484f58').attr('font-size','8');
+}
+
+// ===== 甘特图 =====
+async function drawGantt() {
+  var el=document.getElementById('gantt-chart');
+  el.innerHTML='';
+  
+  // 获取实时数据
+  var flow=await fetchJSON(API+'/api/projects/demo-project/flow');
+  var projects=await fetchJSON(API+'/api/projects');
+  var tasks=flow&&flow.tasks?flow.tasks:[];
+  var project=projects?projects.filter(function(pj){return pj.status==='active'||pj.status==='running';})[0]:null;
+  if(!project)project=projects?projects[0]:null;
+  var phases=project?project.phases||{}:{};
+  
+  // 状态工具函数
+  function phaseStatus(phId){
+    if(phId==='planner'||phId==='orchestrator'){return 'completed';}
+    if(phId==='checker'){return 'running';}
+    var st=phases[phId];
+    return st?st.status:'pending';
+  }
+  function stColor(s){
+    if(s==='passed'||s==='completed')return '#238636';
+    if(s==='running'||s==='in_progress')return '#d29922';
+    return '#30363d';
+  }
+  function stLabel(s){
+    if(s==='passed'||s==='completed')return '[完成]';
+    if(s==='running'||s==='in_progress')return '[进行]';
+    return '[待办]';
+  }
+  
+  if(!flow){el.innerHTML='<div class="card"><div class="card-title">无数据</div></div>';return}
+  
+  var w=el.clientWidth||700;
+  var margin={top:10,right:20,bottom:10,left:110};
+  var innerW=w-margin.left-margin.right;
+  var laneH=90,subH=16;
+  var tasks=flow.tasks||[];
+  
+  // === 统一时间轴（百分比）= 真实业务时序 ===
+  // 0%        10%   20%    35%      50%     65%        80%    90%  100%
+  // | 策略规划 | 编排 | 调研 | 框架  | 设计4并行 | 2串行  |图例| PPT|
+  // |←-------- 质控贯穿全程 --------------------------------→|
+  var timeline=[
+    {id:'planner',	name:'规划',	startP:0,	endP:10,	stream:'strategy',	color:'#d29922'},
+    {id:'orchestrator',	name:'编排',	startP:10,	endP:20,	stream:'strategy',	color:'#d29922'},
+    {id:'research',	name:'调研',	startP:20,	endP:35,	stream:'business',	color:'#58a6ff'},
+    {id:'framework',	name:'框架',	startP:35,	endP:50,	stream:'business',	color:'#58a6ff'},
+    {id:'design',	name:'设计4并行',startP:50,	endP:68,	stream:'business',	color:'#58a6ff'},
+    {id:'serial',	name:'原型+预算',startP:68,	endP:82,	stream:'business',	color:'#58a6ff'},
+    {id:'diagrams',	name:'图例汇总',	startP:82,	endP:90,	stream:'business',	color:'#58a6ff'},
+    {id:'ppt',	name:'PPT',	startP:90,	endP:100,	stream:'business',	color:'#58a6ff'},
+    {id:'checker',	name:'检查校审',	startP:0,	endP:100,	stream:'quality',	color:'#3fb950'}
+  ];
+  
+  var streams=[
+    {name:'策略流',yLabel:14,color:'#d29922',desc:'规划→编排'},
+    {name:'业务流',yLabel:14,color:'#58a6ff',desc:'调研→框架→原型→预算→图例→PPT'},
+    {name:'质控流',yLabel:14,color:'#3fb950',desc:'贯穿全流程·节点检查校审'}
+  ];
+  
+  var svgH=margin.top+streams.length*laneH+margin.bottom;
+  var svg=d3.select(el).append('svg').attr('width',w).attr('height',svgH);
+  var y=margin.top;
+  
+  // === 顶部时间标尺 ===
+  svg.append('rect').attr('x',margin.left).attr('y',y-4).attr('width',innerW).attr('height',16)
+    .attr('fill','#0d1117').attr('rx','3');
+  svg.append('text').text('◀ 时间轴 [策略→业务→质控]').attr('x',margin.left+innerW/2).attr('y',y+6)
+    .attr('text-anchor','middle').attr('fill','#484f58').attr('font-size','9');
+  // 时间刻度
+  for(var ti=0;ti<=100;ti+=25){
+    var tx=margin.left+ti/100*innerW;
+    svg.append('line').attr('x1',tx).attr('y1',y-3).attr('x2',tx).attr('y2',y+1)
+      .attr('stroke','#30363d').attr('stroke-width',1);
+    svg.append('text').text(ti+'%').attr('x',tx).attr('y',y-5)
+      .attr('text-anchor','middle').attr('fill','#30363d').attr('font-size','7');
+  }
+  
+  // === 按流绘制 ===
+  streams.forEach(function(st,si){
+    y=margin.top+si*laneH+16; // 留出标尺高度
+    
+    // 流背景
+    svg.append('rect').attr('x',margin.left).attr('y',y).attr('width',innerW).attr('height',laneH-18)
+      .attr('fill','#161b22').attr('rx','6').attr('opacity',.5);
+    
+    // 左侧标签
+    svg.append('text').text(st.name).attr('x',margin.left-8).attr('y',y+20)
+      .attr('text-anchor','end').attr('fill','#c9d1d9').attr('font-size','12').attr('font-weight','bold');
+    svg.append('text').text(st.desc).attr('x',margin.left-8).attr('y',y+38)
+      .attr('text-anchor','end').attr('fill','#484f58').attr('font-size','8');
+    
+    // 该流的阶段
+    var streamPhases=timeline.filter(function(ph){return ph.stream===st.name.split(' ')[1];});
+    // 对于质控流，stream='quality'
+    if(si===0)streamPhases=timeline.filter(function(ph){return ph.stream==='strategy';});
+    else if(si===1)streamPhases=timeline.filter(function(ph){return ph.stream==='business';});
+    else streamPhases=timeline.filter(function(ph){return ph.stream==='quality';});
+    
+    streamPhases.forEach(function(ph){
+      var sx=margin.left+ph.startP/100*innerW;
+      var sw=((ph.endP-ph.startP)/100)*innerW;
+      
+      // 阶段名称 + 状态标签
+      var phSt=phaseStatus(ph.id);
+      var phStStr=stLabel(phSt)+' '+ph.name;
+      var labelY=y+10;
+      if(si===2)labelY=y+28;
+      svg.append('text').text(phStStr).attr('x',sx+sw/2).attr('y',labelY)
+        .attr('text-anchor','middle').attr('fill',stColor(phSt)).attr('font-size','9');
+      
+      // 该阶段的任务
+      var phaseTasks=tasks.filter(function(t){
+        var id=t.task_id||'';
+        if(ph.id==='planner')return id.startsWith('planner');
+        if(ph.id==='orchestrator')return id.startsWith('orchestrator');
+        if(ph.id==='checker')return id.startsWith('check');
+        if(ph.id==='design')return /^(requirements|architecture|subproject|common)/.test(id);
+        if(ph.id==='serial')return /^(prototype|budget)/.test(id);
+        return id.startsWith(ph.id);
+      });
+      
+      // 进度条（子任务进度）
+      var phSt=phaseStatus(ph.id);
+      var barColor=stColor(phSt);
+      if(phaseTasks.length>0){
+        var done=phaseTasks.filter(function(t){return t.status==='completed';}).length;
+        var total=phaseTasks.length;
+        var barY=si===2?y+26:y+17;
+        svg.append('rect').attr('x',sx+2).attr('y',barY).attr('width',sw-4).attr('height',8)
+          .attr('fill','#21262d').attr('rx','2');
+        svg.append('rect').attr('x',sx+2).attr('y',barY).attr('width',(sw-4)*done/total).attr('height',8)
+          .attr('fill',barColor).attr('opacity',.9).attr('rx','2');
+        svg.append('text').text(done+'/'+total).attr('x',sx+sw/2).attr('y',barY+7)
+          .attr('text-anchor','middle').attr('fill','#fff').attr('font-size','6');
+      }else{
+        // 空阶段展示灰条
+        if(si<2){
+          svg.append('rect').attr('x',sx+2).attr('y',y+17).attr('width',sw-4).attr('height',8)
+            .attr('fill','#21262d').attr('rx','2').attr('opacity',.5);
+        }
+      }
+      
+      // 子任务行
+      if(phaseTasks.length>0){
+        var sy=y+30;
+        phaseTasks.forEach(function(t,ti){
+          if(ti>=5)return; // 最多显示5行，避免溢出
+          var desc=(t.description||t.task_id||'').replace('design:','').replace('requirements:','需').replace('architecture:','总').replace('subproject:','分').replace('common:','共').replace('prototype:','原').replace('budget:','预').slice(0,10);
+          svg.append('text').text(desc).attr('x',sx+4).attr('y',sy+subH/2)
+            .attr('dominant-baseline','middle').attr('fill','#8b949e').attr('font-size','7');
+          // 状态小点（已完成用绿，否则用阶段色淡版）
+          svg.append('circle').attr('cx',sx+sw-8).attr('cy',sy+subH/2).attr('r',4)
+            .attr('fill',t.status==='completed'?'#238636':'#21262d');
+          sy+=subH;
+        });
+        if(phaseTasks.length>5){
+          svg.append('text').text('+'+(phaseTasks.length-5)+' more').attr('x',sx+4).attr('y',sy)
+            .attr('fill','#484f58').attr('font-size','7');
+        }
+      }
+    });
+  });
+  
+  // 图例
+  y=margin.top+3*laneH+14;
+  var totalPh=Object.keys(phases).length;
+  var donePh=Object.values(phases).filter(function(v){return v.status==='passed'||v.status==='completed';}).length;
+  svg.append('text').text('阶段: '+donePh+'/'+totalPh+' 完成').attr('x',margin.left).attr('y',y)
+    .attr('fill','#484f58').attr('font-size','8');
+  svg.append('text').text('[完成]已完成 [进行]进行中 [待办]待开始').attr('x',margin.left+180).attr('y',y)
+    .attr('fill','#484f58').attr('font-size','8');
+  svg.append('text').text('(绿圆)已完成 (灰圆)待完成').attr('x',margin.left+380).attr('y',y)
+    .attr('fill','#484f58').attr('font-size','8');
+}
+
+// ===== 刷新 =====
+async function refreshAll() {
+  try {
+    const p=await fetchJSON(API+'/api/projects');
+    if(p&&p.length){const ph=p[0].phases||{},t=Object.keys(ph).length,d=Object.values(ph).filter(v=>v.status==='passed'||v.status==='completed').length;
+    document.getElementById('nav-status').textContent=`${p[0].name||'项目'} · ${p[0].current_phase||'N/A'} · ${d}/${t}阶段`;}
+  }catch(e){}
+  if(leftTab==='status') await loadProject(); else await loadDocs();
+  await Promise.all([loadAgents(),loadDelivery()]);
+}
+
+setInterval(refreshAll,15000);
+switchLeftTab('status');
+switchRightTab('agents');
+
+// === 布局变化重绘 ===
+// 1. 面板折叠→transitionend事件（togglePanel中处理）
+// 2. 窗口缩放
+var resizeTimer2;
+window.onresize=function(){
+  clearTimeout(resizeTimer2);
+  resizeTimer2=setTimeout(function(){
+    var active=document.querySelector('.tab-content.active');
+    if(active&&active.id==='tab-topology')drawTopology();
+    else if(active&&active.id==='tab-gantt')drawGantt();
+  },400); // 等窗口稳定
+};
+// 3. dashboard-grid class变化（collapse状态变更的兜底）
+var gridWatcher=new MutationObserver(function(){
+  var active=document.querySelector('.tab-content.active');
+  if(active&&active.id==='tab-topology')drawTopology();
+  else if(active&&active.id==='tab-gantt')drawGantt();
+});
+// 初始渲染
+setTimeout(function(){
+  drawTopology();
+  gridWatcher.observe(document.getElementById('dashboard-grid'),{attributes:true,attributeFilter:['class']});
+},500);
+</script>
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modal-box"></div>
+</div>
+</body>
+</html>
