@@ -1,0 +1,35 @@
+{
+  "agent_id": "diagrams",
+  "name": "图例汇总智能体",
+  "emoji": "📊",
+  "description": "收集所有子节点mermaid草稿→标准化→drawio→PNG插入正文",
+  "expertise": "架构图绘制 · mermaid · drawio · 图表标准化 · 跨章节引用校验",
+  "status": "idle",
+  "tasks_completed": 1,
+  "total_tokens_used": 2800,
+  "assigned_to": "vm3",
+  "artifacts": [
+    "图例汇总"
+  ],
+  "input_output": {
+    "input": "①各子节点的mermaid代码草稿（需求/总体/分项/公共/原型共5份）②图表规范规则（编号/风格/引用格式）",
+    "intermediate": "drawio格式文件（由mermaid转换而来，用于人工审阅+二次编辑）",
+    "output": "PNG图片（统一编号：图1-X，标准化风格，插入方案书对应位置）",
+    "trigger": "串行←依赖需求/总体/分项/公共/原型/预算全部完成",
+    "workflow": "收集mermaid草稿→标准化编号和风格→转换drawio（中间产物）→导出PNG→插入正文对应位置"
+  },
+  "updated_at": "2026-07-12T15:11:26.317780",
+  "self_check": {
+    "scope": "输入→中间数据→输出 全链条自检",
+    "checklist": [
+      "☐ 输入不缺项 — 大纲要点/指标要求/背景知识全部被覆盖",
+      "☐ 中间数据正确 — 推导过程的每一步中间产物合理、可回溯",
+      "☐ 输出无遗漏 — 最终产出包含了所有必要的章节/代码/数据",
+      "☐ 逻辑一致性 — 从输入经中间推导到输出，前后不自相矛盾",
+      "☐ 引用可回溯 — 每个结论能追溯到输入依据",
+      "☐ mermaid代码(按需) — 若有要求确认已生成"
+    ],
+    "action_on_fail": "自检不通过→自行修正→重复自检→通过后提交至外部检查",
+    "principle": "自检检查内部推导链，不通过不提交"
+  }
+}
