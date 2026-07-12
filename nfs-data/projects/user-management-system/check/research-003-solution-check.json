@@ -1,0 +1,148 @@
+{
+  "check_id": "research-003-solution-check",
+  "task_id": "research-003-solution",
+  "task_name": "方案知识整理",
+  "phase": "research",
+  "vm": "vm3",
+  "status": "failed",
+  "overall_verdict": "failed",
+  "estimated_tokens": 20000,
+  "content_check": {
+    "status": "passed",
+    "items": [
+      {
+        "rule_id": "C01",
+        "rule_name": "内容完整性",
+        "status": "pass",
+        "description": "内容是否足够详实（>200字符）"
+      },
+      {
+        "rule_id": "C02",
+        "rule_name": "需求覆盖",
+        "status": "pass",
+        "description": "是否覆盖核心需求（需求/功能/性能关键词）"
+      },
+      {
+        "rule_id": "C03",
+        "rule_name": "结论清晰",
+        "status": "pass",
+        "description": "是否有明确结论或建议"
+      },
+      {
+        "rule_id": "C04",
+        "rule_name": "结构完整",
+        "status": "pass",
+        "description": "是否有二级标题分段"
+      }
+    ]
+  },
+  "proofread_check": {
+    "status": "failed",
+    "items": [
+      {
+        "rule_id": "P01",
+        "rule_name": "标题层级",
+        "status": "fail",
+        "description": "一级标题(#)不应超过1个"
+      },
+      {
+        "rule_id": "P02",
+        "rule_name": "编号体系",
+        "status": "pass",
+        "description": "章节编号是否完整（存根检查）"
+      },
+      {
+        "rule_id": "P03",
+        "rule_name": "术语一致性",
+        "status": "pass",
+        "description": "术语用词是否一致（存根检查）"
+      },
+      {
+        "rule_id": "P04",
+        "rule_name": "图表引用",
+        "status": "warn",
+        "description": "是否含图形/表格引用"
+      },
+      {
+        "rule_id": "P05",
+        "rule_name": "排版规范",
+        "status": "pass",
+        "description": "无制表符、无多余空格换行"
+      }
+    ]
+  },
+  "checklist": [
+    {
+      "rule_id": "C01",
+      "rule_name": "内容完整性",
+      "status": "pass",
+      "description": "内容是否足够详实（>200字符）"
+    },
+    {
+      "rule_id": "C02",
+      "rule_name": "需求覆盖",
+      "status": "pass",
+      "description": "是否覆盖核心需求（需求/功能/性能关键词）"
+    },
+    {
+      "rule_id": "C03",
+      "rule_name": "结论清晰",
+      "status": "pass",
+      "description": "是否有明确结论或建议"
+    },
+    {
+      "rule_id": "C04",
+      "rule_name": "结构完整",
+      "status": "pass",
+      "description": "是否有二级标题分段"
+    },
+    {
+      "rule_id": "P01",
+      "rule_name": "标题层级",
+      "status": "fail",
+      "description": "一级标题(#)不应超过1个"
+    },
+    {
+      "rule_id": "P02",
+      "rule_name": "编号体系",
+      "status": "pass",
+      "description": "章节编号是否完整（存根检查）"
+    },
+    {
+      "rule_id": "P03",
+      "rule_name": "术语一致性",
+      "status": "pass",
+      "description": "术语用词是否一致（存根检查）"
+    },
+    {
+      "rule_id": "P04",
+      "rule_name": "图表引用",
+      "status": "warn",
+      "description": "是否含图形/表格引用"
+    },
+    {
+      "rule_id": "P05",
+      "rule_name": "排版规范",
+      "status": "pass",
+      "description": "无制表符、无多余空格换行"
+    }
+  ],
+  "issues": [
+    "校审: 标题层级"
+  ],
+  "file_checks": {
+    "artifacts/research/003_solution.md": {
+      "found": true,
+      "size": 225
+    }
+  },
+  "intervention": {
+    "action": "override",
+    "override_result": "approved",
+    "comment": "模拟数据所致，真实LLM产出不受影响",
+    "issued_by": "human",
+    "issued_at": "2026-07-12T14:00:10.044450"
+  },
+  "final_decision": "approved",
+  "checked_at": "2026-07-12T13:59:21.390397"
+}
