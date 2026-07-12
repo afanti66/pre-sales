@@ -1,0 +1,42 @@
+{
+  "plan_id": "PLAN-PPT-demo-project",
+  "project": "demo-project",
+  "phase": "ppt",
+  "level": "stage",
+  "created_at": "2026-07-12T15:37:04.755246",
+  "token_budget": {
+    "total_available": 3145728,
+    "per_vm": 1048576,
+    "safety_margin": 0.3,
+    "usable_per_vm": 734003
+  },
+  "assessment": {
+    "input_size_estimate": 50000,
+    "output_size_estimate": 10000,
+    "total_estimate": 60000,
+    "verdict": "level_ok"
+  },
+  "items": [
+    {
+      "task_id": "ppt-001",
+      "level": "task",
+      "assignee": "vm3",
+      "estimated_tokens": 35000,
+      "depends_on": [
+        "design-007-diagrams"
+      ],
+      "description": "PPT制作"
+    },
+    {
+      "task_id": "check-ppt",
+      "level": "task",
+      "assignee": "vm2",
+      "estimated_tokens": 18000,
+      "depends_on": [
+        "ppt-001"
+      ],
+      "description": "PPT检查+校审"
+    }
+  ],
+  "reasoning": "输入估算50K + 输出估算10K = 总需求60K, 可用727K/VM. 结论: level_ok. 采用stage级粒度."
+}
