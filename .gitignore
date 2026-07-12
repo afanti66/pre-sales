@@ -1,0 +1,21 @@
+# 敏感数据
+nfs-data/projects/*/artifacts/
+nfs-data/projects/*/check/
+nfs-data/projects/*/delivery/
+nfs-data/knowledge/templates/*.md
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# 视频/图片生成产物
+gen_promo_video.py
+promo-*.mp4
+promo-frames/
+
+# 系统
+.DS_Store
+*.swp
+*.swo
