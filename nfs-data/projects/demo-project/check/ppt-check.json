@@ -1,0 +1,52 @@
+{
+  "check_id": "check-ppt-demo-project",
+  "phase": "ppt",
+  "status": "passed",
+  "checked_by": "checker-001",
+  "checked_at": "2026-07-12T15:37:05.087698",
+  "content_check": {
+    "status": "passed",
+    "issues": [],
+    "completeness": 100
+  },
+  "proofreading": {
+    "status": "minor_issues",
+    "issues": [
+      {
+        "type": "terminology",
+        "description": "缺少关键术语'用户管理'",
+        "location": "projects/demo-project/artifacts/ppt/presentation.pptx",
+        "suggestion": "考虑补充'用户管理'相关描述"
+      },
+      {
+        "type": "terminology",
+        "description": "缺少关键术语'身份认证'",
+        "location": "projects/demo-project/artifacts/ppt/presentation.pptx",
+        "suggestion": "考虑补充'身份认证'相关描述"
+      },
+      {
+        "type": "terminology",
+        "description": "缺少关键术语'统一'",
+        "location": "projects/demo-project/artifacts/ppt/presentation.pptx",
+        "suggestion": "考虑补充'统一'相关描述"
+      },
+      {
+        "type": "terminology",
+        "description": "缺少关键术语'SSO'",
+        "location": "projects/demo-project/artifacts/ppt/presentation.pptx",
+        "suggestion": "考虑补充'SSO'相关描述"
+      },
+      {
+        "type": "terminology",
+        "description": "缺少关键术语'RBAC'",
+        "location": "projects/demo-project/artifacts/ppt/presentation.pptx",
+        "suggestion": "考虑补充'RBAC'相关描述"
+      }
+    ],
+    "corrections_made": 0
+  },
+  "delivery_artifacts": [
+    "projects/demo-project/artifacts/ppt/presentation.pptx"
+  ],
+  "rework_targets": []
+}
