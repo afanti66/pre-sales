@@ -1,0 +1,35 @@
+{
+  "task_id": "framework-001-matrix",
+  "name": "需求矩阵",
+  "type": "framework-matrix",
+  "phase": "framework",
+  "vm": "vm1",
+  "status": "done",
+  "dependencies": [],
+  "input_files": [],
+  "output_files": [
+    "artifacts/framework/001_matrix.md"
+  ],
+  "estimated_tokens": 16000,
+  "token_budget": {
+    "max_input": 35200,
+    "max_output": 22400,
+    "estimated": 16000
+  },
+  "self_check_required": true,
+  "check_task_id": "framework-001-matrix-check",
+  "created_at": "2026-07-12T14:00:32.462353",
+  "started_at": "2026-07-12T14:00:34.713471",
+  "completed_at": "2026-07-12T14:00:34.714339",
+  "result_summary": {
+    "output_files": [
+      "artifacts/framework/001_matrix.md"
+    ],
+    "token_used": 16000,
+    "self_check": {
+      "content_check": "通过",
+      "format_check": "通过",
+      "notes": null
+    }
+  }
+}
