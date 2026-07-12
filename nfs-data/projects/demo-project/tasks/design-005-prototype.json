@@ -1,0 +1,30 @@
+{
+  "task_id": "design-005-prototype",
+  "phase": "design",
+  "level": "stage",
+  "assignee": "vm2",
+  "status": "completed",
+  "depends_on": [
+    "design-001-requirement"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/design/001_requirement.md",
+      "description": "需求分析章节"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/design/005_prototype.md",
+      "description": "方案书·原型设计章节"
+    }
+  ],
+  "estimated_tokens": 10000,
+  "actual_tokens": 11144,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "按方案大纲原型设计部分目录，编写原型设计章节（界面布局、交互流程、原型图说明）",
+  "started_at": null,
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "prototype"
+}
