@@ -1,0 +1,10 @@
+{
+  "agent_id": "orchestrator-001",
+  "role": "orchestrator",
+  "status": "idle",
+  "current_project": "demo-project",
+  "current_plan_id": null,
+  "tasks_dispatched": 0,
+  "tasks_completed": 0,
+  "last_action_at": null
+}
