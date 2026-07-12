@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["type", "action", "created_by", "created_at"],
+  "properties": {
+    "type": {"type": "string", "enum": ["check_override", "plan_override", "orchestration_override"]},
+    "action": {"type": "string", "enum": ["override_result", "skip_task", "insert_task", "re_run", "pause_phase", "force_level"]},
+    "created_by": {"type": "string"},
+    "created_at": {"type": "string"},
+    "target": {
+      "oneOf": [
+        {"type": "string"},
+        {"type": "object",
+         "properties": {
+           "phase": {"type": "string"},
+           "task_id": {"type": "string"},
+           "agent": {"type": "string"}
+         }
+        }
+      ]
+    },
+    "params": {"type": "object"},
+    "reason": {"type": "string"},
+    "ttl": {"type": "integer", "description": "过期时间（秒），超时自动忽略"}
+  }
+}
