@@ -1,0 +1,39 @@
+{
+  "task_id": "design-003-subproject",
+  "phase": "design",
+  "level": "stage",
+  "assignee": "vm3",
+  "status": "completed",
+  "depends_on": [
+    "framework-003-system"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/framework/003_system.md",
+      "description": "系统框架"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲·分项章节"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/design/003_subproject.md",
+      "description": "方案书·分项方案章节"
+    },
+    {
+      "path": "projects/demo-project/artifacts/design/mermaid-drafts/003_subproject.md",
+      "description": "子系统数据流mermaid草稿"
+    }
+  ],
+  "estimated_tokens": 25000,
+  "actual_tokens": 10946,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "按方案大纲分项部分目录，编写分项方案章节（各子系统详细设计、接口定义、数据流）",
+  "started_at": "2026-07-12T15:37:03.817358",
+  "completed_at": "2026-07-12T17:32:30.390337",
+  "agent_id": "subproject"
+}
