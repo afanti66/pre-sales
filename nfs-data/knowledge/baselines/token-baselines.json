@@ -1,0 +1,91 @@
+{
+  "version": "1.0",
+  "description": "各任务类型的平均token消耗基线，基于历史统计",
+  "baselines": {
+    "research-outline": {
+      "avg_input": 8000,
+      "avg_output": 4000,
+      "total": 12000
+    },
+    "research-literature": {
+      "avg_input": 10000,
+      "avg_output": 6000,
+      "total": 16000
+    },
+    "research-solution": {
+      "avg_input": 12000,
+      "avg_output": 8000,
+      "total": 20000
+    },
+    "framework-matrix": {
+      "avg_input": 10000,
+      "avg_output": 5000,
+      "total": 15000
+    },
+    "framework-business": {
+      "avg_input": 8000,
+      "avg_output": 6000,
+      "total": 14000
+    },
+    "framework-system": {
+      "avg_input": 12000,
+      "avg_output": 8000,
+      "total": 20000
+    },
+    "design-requirement": {
+      "avg_input": 10000,
+      "avg_output": 6000,
+      "total": 16000
+    },
+    "design-overall": {
+      "avg_input": 12000,
+      "avg_output": 8000,
+      "total": 20000
+    },
+    "design-subproject": {
+      "avg_input": 15000,
+      "avg_output": 10000,
+      "total": 25000
+    },
+    "design-common": {
+      "avg_input": 8000,
+      "avg_output": 5000,
+      "total": 13000
+    },
+    "design-prototype": {
+      "avg_input": 6000,
+      "avg_output": 4000,
+      "total": 10000
+    },
+    "design-budget": {
+      "avg_input": 8000,
+      "avg_output": 4000,
+      "total": 12000
+    },
+    "design-diagrams": {
+      "avg_input": 20000,
+      "avg_output": 12000,
+      "total": 32000
+    },
+    "diagram-single": {
+      "avg_input": 5000,
+      "avg_output": 3000,
+      "total": 8000
+    },
+    "ppt-creation": {
+      "avg_input": 25000,
+      "avg_output": 10000,
+      "total": 35000
+    },
+    "check-content": {
+      "avg_input": 15000,
+      "avg_output": 3000,
+      "total": 18000
+    },
+    "check-proofread": {
+      "avg_input": 20000,
+      "avg_output": 2000,
+      "total": 22000
+    }
+  }
+}
