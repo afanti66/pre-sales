@@ -1,0 +1,35 @@
+{
+  "task_id": "framework-001-matrix",
+  "phase": "framework",
+  "level": "task",
+  "assignee": "vm1",
+  "status": "completed",
+  "depends_on": [
+    "research-001-outline",
+    "research-003-solution"
+  ],
+  "input_refs": [
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/001_outline.md",
+      "description": "方案大纲"
+    },
+    {
+      "type": "artifact",
+      "path": "projects/demo-project/artifacts/research/003_solution.md",
+      "description": "方案知识"
+    }
+  ],
+  "output_refs": [
+    {
+      "path": "projects/demo-project/artifacts/framework/001_matrix.md",
+      "description": "需求矩阵"
+    }
+  ],
+  "estimated_tokens": 15000,
+  "actual_tokens": 2203,
+  "created_at": "2026-07-12T14:05:09.505014",
+  "description": "将需求转化为可追溯的需求矩阵（功能需求→技术需求→验收标准对应表）",
+  "started_at": "2026-07-12T15:37:03.246384",
+  "completed_at": "2026-07-12T15:37:03.318300"
+}
